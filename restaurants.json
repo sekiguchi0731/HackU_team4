@@ -1,0 +1,23 @@
+[
+    {
+        "name": "寿司一番",
+        "genre": "寿司",
+        "price_range": "高級",
+        "rating": 4.8,
+        "location": "東京都渋谷区"
+    },
+    {
+        "name": "ラーメン太郎",
+        "genre": "ラーメン",
+        "price_range": "リーズナブル",
+        "rating": 4.2,
+        "location": "東京都新宿区"
+    },
+    {
+        "name": "焼肉王",
+        "genre": "焼肉",
+        "price_range": "中価格",
+        "rating": 4.5,
+        "location": "大阪市北区"
+    }
+]

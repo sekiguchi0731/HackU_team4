@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ランダム飲食店紹介</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .genre-button {
+            margin: 10px;
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .genre-button:hover {
+            background-color: #f0f0f0;
+        }
+        .selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>飲食店ジャンルを選んでください</h1>
+
+    <!-- 9つのジャンル選択ボタン -->
+    <button class="genre-button" data-genre="ラーメン">ラーメン</button>
+    <button class="genre-button" data-genre="寿司">寿司</button>
+    <button class="genre-button" data-genre="カフェ">カフェ</button>
+    <button class="genre-button" data-genre="居酒屋">居酒屋</button>
+    <button class="genre-button" data-genre="焼肉">焼肉</button>
+    <button class="genre-button" data-genre="イタリアン">イタリアン</button>
+    <button class="genre-button" data-genre="中華">中華</button>
+    <button class="genre-button" data-genre="和食">和食</button>
+    <button class="genre-button" data-genre="インド料理">インド料理</button>
+
+    <script>
+        const buttons = document.querySelectorAll('.genre-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // すべてのボタンから選択状態をリセット
+                buttons.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // クリックしたボタンからジャンルを取得
+                const genre = this.getAttribute('data-genre');
+                
+                // 選ばれたジャンルに基づいてページ遷移（GETリクエストを使用）
+                window.location.href = `/restaurant?genre=${encodeURIComponent(genre)}`;
+            });
+        });
+    </script>
+</body>
+</html>
