@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import json
 import os
 import random
@@ -128,10 +128,14 @@ def get_random_by_genre():
     random_restaurant = random.choice(filtered_restaurants)
     return jsonify(random_restaurant)
 
+# 5. ジャンル一覧を返すエンドポイント（デバッグ用）
 @app.route("/genres", methods=["GET"])
 def list_genres():
     genres = sorted(set(r["ジャンル"] for r in restaurants if "ジャンル" in r))
-    return jsonify(genres)
+    return Response(
+        json.dumps(genres, ensure_ascii=False), # 日本語エンコード
+        content_type="application/json; charset=utf-8",
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
