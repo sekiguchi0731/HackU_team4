@@ -1,9 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import json
 import os
 import random
+from typing import Literal
 app = Flask(__name__)
-DATA_FILE = "../data/tenmpo_data.json"
+BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE: str = os.path.join(BASE_DIR, "../data/tenmpo_data.json")
 
 
 @app.route('/')
@@ -66,25 +68,25 @@ def index():
 
 
 # 初期データをロード
-def load_data():
+def load_data() -> list:
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+            data: list = json.load(f)
             for i, item in enumerate(data):
                 item["id"] = i + 1
             return data
     return []
 
-restaurants = load_data()
+restaurants: list = load_data()
 
 # 保存用（任意：永続化したい場合に呼ぶ）
-def save_data():
+def save_data() -> None:
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(restaurants, f, ensure_ascii=False, indent=2)
 
 # 1. お店を単体で返す関数
 @app.route('/restaurant/random', methods=['GET'])
-def get_random_restaurant():
+def get_random_restaurant() -> tuple[Response, Literal[404]] | Response:
     if not restaurants:
         return jsonify({"error": "レストランデータが空です"}), 404
     restaurant = random.choice(restaurants)
@@ -93,13 +95,15 @@ def get_random_restaurant():
 
 # 2. お店をリスト化して複数返す関数
 @app.route('/restaurants', methods=['GET'])
-def get_all_restaurants():
+def get_all_restaurants() -> Response:
     return jsonify(restaurants)
 
 # 3. お店を追加する関数
 @app.route('/restaurant', methods=['POST'])
-def add_restaurant():
-    new_data = request.json
+def add_restaurant() -> tuple[Response, Literal[400]] | tuple[Response, Literal[201]]:
+    new_data: dict | None = request.json
+    if new_data is None:
+        return jsonify({"error": "リクエストデータが空です"}), 400
     if not new_data.get("店名") or not new_data.get("ジャンル") or not new_data.get("席数"):
         return jsonify({"error": "必要な情報が不足しています"}), 400
 
@@ -108,6 +112,33 @@ def add_restaurant():
     restaurants.append(new_data)
     save_data()
     return jsonify(new_data), 201
+
+# 4. ジャンルを指定して店舗をランダムに返すエンドポイント
+@app.route("/random_by_genre", methods=["GET"])
+def get_random_by_genre() -> tuple[Response, Literal[400]] | tuple[Response, Literal[404]] | Response:
+    genre: str | None = request.args.get("genre")  # クエリパラメータとしてジャンルを取得
+
+    if not genre:
+        return jsonify({"error": "ジャンルが指定されていません"}), 400
+
+    # ジャンルでフィルタリング（"ジャンル" という日本語キーに注意）
+    filtered_restaurants: list = [r for r in restaurants if r.get("ジャンル") == genre]
+
+    if not filtered_restaurants:
+        return jsonify({"error": "該当するお店が見つかりませんでした"}), 404
+
+    # ランダムに1件を選んで返す
+    random_restaurant = random.choice(filtered_restaurants)
+    return jsonify(random_restaurant)
+
+# 5. ジャンル一覧を返すエンドポイント（デバッグ用）
+@app.route("/genres", methods=["GET"])
+def list_genres() -> Response:
+    genres: list = sorted(set(r["ジャンル"] for r in restaurants if "ジャンル" in r))
+    return Response(
+        json.dumps(genres, ensure_ascii=False), # 日本語エンコード
+        content_type="application/json; charset=utf-8",
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
