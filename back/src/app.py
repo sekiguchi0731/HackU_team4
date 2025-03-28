@@ -109,5 +109,28 @@ def add_restaurant():
     save_data()
     return jsonify(new_data), 201
 
+# 4. ジャンルを指定して店舗をランダムに返すエンドポイント
+@app.route("/random_by_genre", methods=["GET"])
+def get_random_by_genre():
+    genre = request.args.get("genre")  # クエリパラメータとしてジャンルを取得
+
+    if not genre:
+        return jsonify({"error": "ジャンルが指定されていません"}), 400
+
+    # ジャンルでフィルタリング（"ジャンル" という日本語キーに注意）
+    filtered_restaurants = [r for r in restaurants if r.get("ジャンル") == genre]
+
+    if not filtered_restaurants:
+        return jsonify({"error": "該当するお店が見つかりませんでした"}), 404
+
+    # ランダムに1件を選んで返す
+    random_restaurant = random.choice(filtered_restaurants)
+    return jsonify(random_restaurant)
+
+@app.route("/genres", methods=["GET"])
+def list_genres():
+    genres = sorted(set(r["ジャンル"] for r in restaurants if "ジャンル" in r))
+    return jsonify(genres)
+
 if __name__ == '__main__':
     app.run(debug=True)
