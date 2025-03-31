@@ -141,6 +141,41 @@ def list_genres() -> Response:
         json.dumps(genres, ensure_ascii=False), # 日本語エンコード
         content_type="application/json; charset=utf-8",
     )
+def recommend_shops(user_lat, user_lng, preferred_category, current_time, shops):
+    recommendations = []
+
+    for shop in shops:
+        # 距離スコア（例: 距離が近いほどスコア高）
+        shop_loc = (shop['latitude'], shop['longitude'])
+        
+        user_loc = (user_lat, user_lng)
+        distance_km = geodesic(user_loc, shop_loc).km
+        distance_score = max(0, 1 - distance_km / 5)  # 5km以内なら加点
+        #ムラサキさんの距離算出関数を使用する予定．
+
+
+        # カテゴリスコア
+        category_score = 1.0 if shop['category'] == preferred_category else 0.0
+
+        # 営業時間スコア
+        time_score = 1.0 if shop['opening_time'] <= current_time <= shop['closeing_time'] else 0.0
+
+        # 空席スコア
+        seat_score = 1.0 if shop['capacity'] > 0 and shop['is_active'] else 0.0
+
+        # 総合スコア（重みを調整可能）
+        total_score = (
+            0.4 * distance_score +
+            0.3 * category_score +
+            0.2 * time_score +
+            0.1 * seat_score
+        )
+
+        if total_score > 0:
+            recommendations.append((shop['name'], total_score))
+
+    recommendations.sort(key=lambda x: x[1], reverse=True)
+    return recommendations
 
 
 
