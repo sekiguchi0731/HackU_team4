@@ -1,6 +1,6 @@
-// src/MatchingPage.tsx
+// src/GenresPage.tsx
 import React, { useState } from "react";
-import './MatchingPage.css'; // スタイルシートのインポート
+import './GenresPage.css'; // スタイルシートのインポート
 
 // カテゴリーデータ
 const categories = [
@@ -15,7 +15,7 @@ const categories = [
   { name: "韓国料理" }
 ];
 
-const MatchingPage: React.FC = () => {
+const GenresPage: React.FC = () => {
   const [search, setSearch] = useState(""); // 検索バーの状態
   const [selectedCategory, setSelectedCategory] = useState<string>(""); // 選ばれたカテゴリ
 
@@ -46,4 +46,4 @@ const MatchingPage: React.FC = () => {
   );
 }
 
-export default MatchingPage;
+export default GenresPage;

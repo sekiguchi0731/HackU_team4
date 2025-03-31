@@ -1,12 +1,12 @@
 // src/App.tsx
 import React from 'react'
 import './App.css'
-import MatchingPage from './MatchingPage' // MatchingPageコンポーネントをインポート
+import GenresPage from './GenresPage'
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <MatchingPage /> {/* MatchingPageコンポーネントを表示 */}
+      <GenresPage /> {/* GenresPageコンポーネントを表示 */}
     </div>
   )
 }
