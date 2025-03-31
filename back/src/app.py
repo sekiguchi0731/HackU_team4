@@ -3,6 +3,8 @@ import json
 import os
 import random
 from typing import Literal
+from datetime import datetime
+from geopy.distance import geodesic
 app = Flask(__name__)
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE: str = os.path.join(BASE_DIR, "../data/tenmpo_data.json")
@@ -139,6 +141,8 @@ def list_genres() -> Response:
         json.dumps(genres, ensure_ascii=False), # 日本語エンコード
         content_type="application/json; charset=utf-8",
     )
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
