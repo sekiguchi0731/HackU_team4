@@ -4,10 +4,30 @@ from .models.restaurants import User,Shop,Seat
 from datetime import datetime
 import utils
 import json
-
+from flask import Response
 def load_data():
     with open('restaurants.json', 'r', encoding='utf-8') as f:
         return json.load(f)
+
+@app.route("/recommend", methods=["GET"])
+def recommend():
+    """
+    ユーザーの位置情報、希望カテゴリ、現在時刻を受け取り、ショップを推薦するエンドポイント
+    """
+    # クエリパラメータを取得
+    user_lat = request.args.get("user_lat", type=float)
+    user_lng = request.args.get("user_lng", type=float)
+    preferred_category = request.args.get("preferred_category", type=str, default="")
+    current_time = request.args.get("current_time", type=str)
+
+    # 必須パラメータのチェック
+    if user_lat is None or user_lng is None or current_time is None:
+        return jsonify({"error": "Missing required parameters"}), 400
+
+    # recommend_shops 関数を呼び出し
+    recommendations = utils.recommend_shops(user_lat, user_lng, preferred_category, current_time)
+    response = json.dumps({"recommendations": recommendations}, ensure_ascii=False)
+    return Response(response, content_type="application/json; charset=utf-8")
 
 
 @app.route('/') #初期画面
