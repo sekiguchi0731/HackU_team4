@@ -74,6 +74,7 @@ def create_shop():
             name = data['name'],
             address = data['address'],
             phone = data['phone'],
+            genre = data['genre'],
             opening_time = data['opening_time'],
             closing_time = data['closing_time'],
             owner_id = id,
