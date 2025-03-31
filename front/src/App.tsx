@@ -1,14 +1,18 @@
 // src/App.tsx
-import React from 'react'
-import './App.css'
-import GenresPage from './GenresPage'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DefaultPage from "./DefaultPage";
+import GenresPage from "./GenresPage";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <GenresPage /> {/* GenresPageコンポーネントを表示 */}
-    </div>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DefaultPage />} />
+        <Route path="/genres" element={<GenresPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
