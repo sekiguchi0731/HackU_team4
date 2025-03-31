@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>お店検索</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4 text-center">お店の登録画面だよ</h1>
+    <form action="/regi_end" method="POST">
+        <div class="mb-3">
+            <label class="form-label">エリア</label>
+            <input type="text" class="form-control" name="area" placeholder="例：渋谷、新宿など">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ジャンル</label>
+            <input type="text" class="form-control" name="genre" placeholder="例：ラーメン、カフェなど">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">住所</label>
+            <input type="text" class="form-control" name="address" placeholder="例： 東京都目黒区大岡山2-12-1">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">検索する</button>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">前の画面に戻るよ</a>
+        </div>
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-secondary">前の画面に戻るよ</a>
+    </div>
+</div>
+</body>
+</html>

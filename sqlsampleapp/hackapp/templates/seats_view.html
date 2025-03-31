@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テーブル管理</title>
+</head>
+<body>
+    <h1>テーブル一覧</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>店舗ID</th>
+            <th>テーブル名</th>
+            <th>収容人数</th>
+            <th>アクティブ状態</th>
+        </tr>
+        {% for seat in seats %}
+        <tr>
+            <td>{{ seat.id }}</td>
+            <td>{{ seat.shop_id }}</td>
+            <td>{{ seat.name }}</td>
+            <td>{{ seat.capacity }}</td>
+            <td>{{ "有効" if seat.is_active else "無効" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>新規テーブル登録</h2>
+    <form action="/seats" method="POST">
+        <label for="shop_id">店舗ID:</label>
+        <input type="number" id="shop_id" name="shop_id" required>
+        <label for="name">テーブル名:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="capacity">収容人数:</label>
+        <input type="number" id="capacity" name="capacity" required>
+        <button type="submit">登録</button>
+
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">初期画面へ</a>
+        </div>
+    </form>
+</body>
+</html>

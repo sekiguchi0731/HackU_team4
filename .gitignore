@@ -24,3 +24,5 @@ yarn-error.log*
 
 /front/node_modules/
 /front/.vite
+
+__pycache__

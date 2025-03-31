@@ -1,0 +1,57 @@
+[
+  {
+      "id": 1,
+      "name": "ラーメン太郎",
+      "genre": "ラーメン",
+      "area": "渋谷",
+      "seats_available": 3,
+      "phone": "03-1234-5678",
+      "description": "こだわりの豚骨ラーメンを提供しています。",
+      "address": "東京都渋谷区神南1丁目19-3",
+      "distance": 0
+  },
+  {
+      "id": 2,
+      "name": "カフェ・ド・ルール",
+      "genre": "カフェ",
+      "area": "新宿",
+      "seats_available": 0,
+      "phone": "03-9876-5432",
+      "description": "落ち着いた雰囲気のカフェ。スイーツも充実。",
+      "address": "東京都新宿区西新宿2丁目1-1",
+      "distance": 0
+  },
+  {
+      "id": 3,
+      "name": "居酒屋さくら",
+      "genre": "居酒屋",
+      "area": "池袋",
+      "seats_available": 5,
+      "phone": "03-1111-2222",
+      "description": "和風個室でゆったりくつろげる居酒屋です。",
+      "address": "東京都豊島区南池袋1丁目28-1",
+      "distance": 0
+  },
+  {
+      "id": 4,
+      "name": "グリルマルシェ",
+      "genre": "居酒屋",
+      "area": "渋谷",
+      "seats_available": 2,
+      "phone": "03-3333-4444",
+      "description": "肉料理に特化したグリルレストラン。",
+      "address": "東京都渋谷区道玄坂2丁目23-12",
+      "distance": 0
+  },
+  {
+      "id": 5,
+      "name": "ベジダイニング結",
+      "genre": "居酒屋",
+      "area": "恵比寿",
+      "seats_available": 1,
+      "phone": "03-5555-6666",
+      "description": "完全ヴィーガン対応のダイニング。",
+      "address": "東京都渋谷区恵比寿4丁目20-3",
+      "distance": 0
+  }
+]

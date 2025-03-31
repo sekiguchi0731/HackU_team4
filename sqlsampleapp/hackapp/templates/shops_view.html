@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店舗管理</title>
+</head>
+<body>
+    <h1>店舗一覧</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>店舗名</th>
+            <th>住所</th>
+            <th>電話番号</th>
+            <th>開店時間</th>
+            <th>閉店時間</th>
+            <th>オーナーID</th>
+        </tr>
+        {% for shop in shops %}
+        <tr>
+            <td>{{ shop.id }}</td>
+            <td>{{ shop.name }}</td>
+            <td>{{ shop.address }}</td>
+            <td>{{ shop.phone }}</td>
+            <td>{{ shop.opening_time }}</td>
+            <td>{{ shop.closing_time }}</td>
+            <td>{{ shop.owner_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>新規店舗登録</h2>
+    <form action="/shops" method="POST">
+        <label for="name">店舗名:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="address">住所:</label>
+        <input type="text" id="address" name="address" required>
+        <label for="phone">電話番号:</label>
+        <input type="text" id="phone" name="phone" required>
+        <label for="opening_time">開店時間:</label>
+        <input type="time" id="opening_time" name="opening_time" required>
+        <label for="closing_time">閉店時間:</label>
+        <input type="time" id="closing_time" name="closing_time" required>
+        <label for="owner_id">オーナーID:</label>
+        <input type="number" id="owner_id" name="owner_id" required>
+        <button type="submit">登録</button>
+
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">初期画面へ</a>
+        </div>
+    </form>
+</body>
+</html>
