@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "./App.css"; // CSS を読み込む
+// src/App.tsx
+import React from 'react'
+import './App.css'
+import MatchingPage from './MatchingPage' // MatchingPageコンポーネントをインポート
 
-const App = () => {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setVisible(true);
-    }, 500); // 0.5秒後にフェードイン開始
-  }, []);
-
+const App: React.FC = () => {
   return (
-    <div className="app-container">
-      <h1 className={`app-title ${visible ? "fade-in" : ""}`}>マッチングアプリ</h1>
+    <div className="App">
+      <MatchingPage /> {/* MatchingPageコンポーネントを表示 */}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
