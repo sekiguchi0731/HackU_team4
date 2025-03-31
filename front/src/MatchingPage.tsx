@@ -1,6 +1,6 @@
 // src/MatchingPage.tsx
 import React, { useState } from "react";
-import './App.css'; // スタイルシートのインポート
+import './MatchingPage.css'; // スタイルシートのインポート
 
 // カテゴリーデータ
 const categories = [

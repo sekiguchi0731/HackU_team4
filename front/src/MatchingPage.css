@@ -1,0 +1,49 @@
+/* src/App.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff8dc; /* クリーム色 */
+  text-align: center;
+  min-height: 100vh;
+  color: #ff8c00; /* 文字をオレンジ */
+}
+
+.search-bar {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* カテゴリーボタンのスタイル */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.category-button {
+  padding: 10px;
+  border: 2px solid #ff8c00; /* オレンジの枠線 */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  background-color: white;
+  color: #ff8c00; /* 文字色オレンジ */
+}
+
+.category-button:hover {
+  transform: scale(1.05);
+  background-color: #ffefd5; /* 薄めのクリーム色 */
+}
+
+.category-button.selected {
+  border-color: #ff8c00;
+  background-color: #ffdab9; /* ちょっと濃いクリーム色 */
+}
+
+.category-button p {
+  font-weight: bold;
+}
