@@ -1,20 +1,60 @@
-/* src/App.css */
+/* コンテナのスタイル */
 .container {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: #fff8dc; /* クリーム色 */
+  background: white; /* 背景を白に統一 */
   text-align: center;
   min-height: 100vh;
-  color: #ff8c00; /* 文字をオレンジ */
+  font-family: 'Poppins', sans-serif;
 }
 
+/* 検索エリア */
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* 検索バーのスタイル */
 .search-bar {
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
+  width: 60%;
+  border: 2px solid #FF8C00;
   border-radius: 5px;
+  color: black;
+  background-color: white;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar:focus {
+  border-color: #FFA733;
+  outline: none;
+}
+
+/* 検索ボタン */
+.search-button {
+  padding: 10px 15px;
+  background-color: #FF8C00; /* オレンジ */
+  color: black; /* 文字を黒に変更 */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.search-button:hover {
+  background-color: #FFA733; /* 少し明るいオレンジ */
+  transform: scale(1.05);
+}
+
+.search-button:active {
+  background-color: #E0E0E0; /* 押したら薄いグレー */
+  color: #FF8C00; /* 文字をオレンジに変更 */
 }
 
 /* カテゴリーボタンのスタイル */
@@ -25,25 +65,26 @@
 }
 
 .category-button {
-  padding: 10px;
-  border: 2px solid #ff8c00; /* オレンジの枠線 */
+  padding: 12px;
+  border: 2px solid #FF8C00;
   border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: background-color 0.3s, transform 0.2s;
   background-color: white;
-  color: #ff8c00; /* 文字色オレンジ */
+  color: gray; /* 文字をグレーに変更 */
+  font-weight: bold;
+  text-align: center;
 }
 
 .category-button:hover {
   transform: scale(1.05);
-  background-color: #ffefd5; /* 薄めのクリーム色 */
+}
+
+.category-button:active {
+  background-color: #E0E0E0;
 }
 
 .category-button.selected {
-  border-color: #ff8c00;
-  background-color: #ffdab9; /* ちょっと濃いクリーム色 */
-}
-
-.category-button p {
-  font-weight: bold;
+  background-color: #FF8C00;
+  color: white;
 }

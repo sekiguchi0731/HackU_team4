@@ -1,0 +1,66 @@
+/* Google Fonts を適用 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* 背景全体 */
+body {
+  background: linear-gradient(135deg, #FFF5E1, #FFDAB9);
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* コンテナのデザイン */
+.default-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* タイトル（Welcome!） */
+.default-page h1 {
+  color: #FF8C00;
+  font-size: 3rem;
+  margin-bottom: 0.3rem;
+  text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
+}
+
+/* Nijimatch の文字アニメーション */
+.nijimatch span {
+  color: #FF6B81;
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(255, 107, 129, 0.3);
+  opacity: 0; /* 最初は透明 */
+  transform: translateY(10px); /* ちょっと下から浮かせる */
+  display: inline-block;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* 1文字ずつ浮かび上がるアニメーション */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ローディングメッセージ */
+.default-page p {
+  color: #555;
+  font-size: 1.2rem;
+  font-weight: bold;
+  position: relative;
+  animation: fadeInOut 1.5s infinite;
+}
+
+/* 点滅アニメーション */
+@keyframes fadeInOut {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

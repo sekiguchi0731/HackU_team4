@@ -1,6 +1,7 @@
 // src/MatchingPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./MatchingPage.css";
 
 type Item = {
   id: number;
@@ -36,10 +37,8 @@ const MatchingPage: React.FC = () => {
 
   const handleSwipe = (direction: "left" | "right") => {
     if (direction === "right") {
-      // Like → reserveページへ遷移
       navigate("/reserve");
     } else {
-      // Nope → 次のカードへ
       if (currentIndex < items.length - 1) {
         setCurrentIndex((prev) => prev + 1);
       } else {
@@ -51,46 +50,15 @@ const MatchingPage: React.FC = () => {
   const currentItem = items[currentIndex];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
+    <div className="matching-container">
       {currentItem && (
-        <div
-          style={{
-            width: 320,
-            height: 420,
-            border: "1px solid #ccc",
-            borderRadius: 16,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            overflow: "hidden",
-            position: "relative",
-            textAlign: "center",
-            backgroundColor: "#fff",
-          }}
-        >
-          <img
-            src={currentItem.image}
-            alt={currentItem.name}
-            style={{ width: "100%", height: 200, objectFit: "cover" }}
-          />
+        <div className="card">
+          <img src={currentItem.image} alt={currentItem.name} className="card-image" />
           <h2>{currentItem.name}</h2>
           <p>{currentItem.description}</p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              position: "absolute",
-              bottom: 20,
-              width: "100%",
-            }}
-          >
-            <button onClick={() => handleSwipe("left")}>👎 Nope</button>
-            <button onClick={() => handleSwipe("right")}>❤️ Like</button>
+          <div className="button-container">
+            <button className="nope-button" onClick={() => handleSwipe("left")}>👎 Nope</button>
+            <button className="like-button" onClick={() => handleSwipe("right")}>❤️ Like</button>
           </div>
         </div>
       )}
