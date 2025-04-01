@@ -5,50 +5,76 @@
     <title>おすすめのお店</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script>
-    function getRecommendations() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                const category = document.getElementById("category").value || "ラーメン";
+        let recommendations = []; // 推薦結果を格納
+        let currentIndex = 0; // 現在表示中のインデックス
 
-                // 現在時刻を HH:MM 形式にする
-                const now = new Date();
-                const timeString = now.getHours().toString().padStart(2, '0') + ':' +
-                                   now.getMinutes().toString().padStart(2, '0');
+        // 推薦結果を取得する関数
+        function getRecommendations() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const category = document.getElementById("category").value || "ラーメン";
 
-                fetch(`/recommend?user_lat=${lat}&user_lng=${lng}&preferred_category=${category}&current_time=${timeString}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const resultDiv = document.getElementById("results");
-                        resultDiv.innerHTML = "<h4>おすすめのお店:</h4>";
+                    // 現在時刻を HH:MM 形式にする
+                    const now = new Date();
+                    const timeString = now.getHours().toString().padStart(2, '0') + ':' +
+                                       now.getMinutes().toString().padStart(2, '0');
 
-                        if (data.recommendations.length === 0) {
-                            resultDiv.innerHTML += "<p>おすすめできるお店が見つかりませんでした。</p>";
-                        } else {
-                            const ul = document.createElement("ul");
-                            data.recommendations.forEach(shop => {
-                                const li = document.createElement("li");
-                                li.innerHTML = `
-                                    <strong>${shop.name}</strong><br>
-                                    総合スコア: ${shop.total_score.toFixed(2)}<br>
-                                    カテゴリスコア: ${shop.category_score}<br>
-                                    距離スコア: ${shop.distance_score}<br>
-                                    営業時間スコア: ${shop.time_score}<br>
-                                    空席スコア: ${shop.seat_score}<br><br>
-                                `;
-                                ul.appendChild(li);
-                            });
-                            resultDiv.appendChild(ul);
-                        }
-                    });
-            }, function (error) {
-                alert("位置情報の取得に失敗しました: " + error.message);
-            });
-        } else {
-            alert("このブラウザは位置情報をサポートしていません。");
+                    fetch(`/recommend?user_lat=${lat}&user_lng=${lng}&preferred_category=${category}&current_time=${timeString}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            recommendations = data.recommendations; // 推薦結果を格納
+                            currentIndex = 0; // インデックスをリセット
+                            showRecommendation(); // 最初の推薦を表示
+                        });
+                }, function (error) {
+                    alert("位置情報の取得に失敗しました: " + error.message);
+                });
+            } else {
+                alert("このブラウザは位置情報をサポートしていません。");
+            }
         }
-    }
+
+        // 推薦結果を表示する関数
+        function showRecommendation() {
+            const resultDiv = document.getElementById("results");
+            resultDiv.innerHTML = ""; // 表示をリセット
+
+            if (currentIndex >= recommendations.length) {
+                resultDiv.innerHTML = "<p>これ以上のおすすめはありません。</p>";
+                return;
+            }
+
+            const shop = recommendations[currentIndex];
+            const shopDiv = document.createElement("div");
+            shopDiv.innerHTML = `
+                <h4>${shop.name}</h4>
+                <p>総合スコア: ${shop.total_score.toFixed(2)}</p>
+                <p>カテゴリスコア: ${shop.category_score}</p>
+                <p>距離スコア: ${shop.distance_score}</p>
+                <p>営業時間スコア: ${shop.time_score}</p>
+                <p>空席スコア: ${shop.seat_score}</p>
+                <div class="mt-3">
+                    <button class="btn btn-success me-2" onclick="likeShop()">Like</button>
+                    <button class="btn btn-danger" onclick="badShop()">Bad</button>
+                </div>
+            `;
+            resultDiv.appendChild(shopDiv);
+        }
+
+        // Like ボタンが押されたとき
+        function likeShop() {
+            const shop = recommendations[currentIndex];
+            // reserve.html に遷移し、選択したショップの情報をクエリパラメータとして渡す
+            window.location.href = `/reserve?shop_name=${encodeURIComponent(shop.name)}`;
+        }
+
+        // Bad ボタンが押されたとき
+        function badShop() {
+            currentIndex++; // 次のショップに進む
+            showRecommendation();
+        }
     </script>
 </head>
 <body class="bg-light">
