@@ -187,21 +187,41 @@ def result():
     
     return render_template('results.html', results=results, genre=genre)
 
-from flask import render_template, request
 
-@app.route('/reserve')
+@app.route('/reserve', methods=['GET', 'POST'])
 def reserve_page():
-    # クエリパラメータからショップ名を取得
-    shop_name = request.args.get("shop_name", "不明なショップ")
+    if request.method == 'GET':
+        # クエリパラメータからショップ名を取得
+        shop_name = request.args.get("shop_name", "不明なショップ")
 
-    # ショップ名に基づいて店舗を取得
-    shop = Shop.query.filter_by(name=shop_name).first()
+        # ショップ名に基づいて店舗を取得
+        shop = Shop.query.filter_by(name=shop_name).first()
 
-    if not shop:
-        return render_template("reserve.html", shop_name=shop_name, seats=[])
+        if not shop:
+            return render_template("reserve.html", shop_name=shop_name, seats=[])
 
-    # 該当店舗の is_active=False の席を取得
-    inactive_seats = Seat.query.filter_by(shop_id=shop.id, is_active=True).all()
+        # 該当店舗の is_active=True の席を取得
+        active_seats = Seat.query.filter_by(shop_id=shop.id, is_active=True).all()
 
-    # 席情報をテンプレートに渡す
-    return render_template("reserve.html", shop_name=shop_name, seats=inactive_seats)
+        # 席情報をテンプレートに渡す
+        return render_template("reserve.html", shop_name=shop_name, seats=active_seats)
+
+    elif request.method == 'POST':
+        # フォームデータから選択された席のIDを取得
+        seat_id = request.form.get("seat_id")
+        shop_name = request.form.get("shop_name")
+
+        if not seat_id:
+            return render_template("reserve.html", shop_name=shop_name, seats=[], error="席を選択してください。")
+
+        # 選択された席を予約（is_active を False に変更）
+        seat = Seat.query.get(seat_id)
+        if seat and seat.is_active:
+            seat.is_active = False
+            #testのためいちいちfalseにするとめんどくさいのでのちにコメントアウト#
+            seat.is_active = True
+
+            db.session.commit()
+            return render_template("reserve_success.html", shop_name=shop_name, seat=seat)
+        else:
+            return render_template("reserve.html", shop_name=shop_name, seats=[], error="選択された席が見つからないか、既に予約されています。")
