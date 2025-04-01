@@ -1,4 +1,5 @@
 from flask import render_template, request, jsonify
+from flask_cors import cross_origin
 from hackapp import app,db
 from .models.restaurants import User,Shop,Seat
 from datetime import datetime
@@ -158,6 +159,15 @@ def reg_end():
 @app.route('/search')   #お店検索画面
 def search():
     return render_template('search.html')
+
+# 全てのジャンルを取得する
+@app.route("/genres", methods=["GET"])
+@cross_origin(origins="http://localhost:5173")
+def get_genres() -> Response:
+    genres = db.session.query(Shop.category).distinct().all()
+    genre_list = [g[0] for g in genres if g[0]]  # タプルから文字列を取り出す
+    return jsonify(genre_list)
+
 
 @app.route('/result', methods=['POST']) #検索したお店を表示する画面
 def result():
