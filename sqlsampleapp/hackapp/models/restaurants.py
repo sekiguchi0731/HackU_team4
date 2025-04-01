@@ -17,6 +17,7 @@ class Shop(db.Model):
     category = db.Column(db.String(50))  # 例: "居酒屋", "焼肉", etc.
     address = db.Column(db.String(200))
     phone = db.Column(db.String(50))
+    category = db.Column(db.String(50))
     opening_time = db.Column(db.String(10))
     closing_time = db.Column(db.String(10))
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))

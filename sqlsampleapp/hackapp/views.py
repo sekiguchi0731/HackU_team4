@@ -109,24 +109,39 @@ def create_shop():
 
     return render_template('shops_view.html', shops=shops)
 
-@app.route('/seats_sign_up')    #空席情報登録画面   
+@app.route('/seats_sign_up',methods=['GET','POST'])    #空席情報登録画面   
 def seats_sign_up():
-    return render_template('seats.html')
+    id = request.form.get("owner_id")
+    return render_template('seats.html',owner_id = id)
 
 @app.route('/seats', methods=['GET','POST'])    #空席情報登録画面から受け取った情報をDBに格納&表示
 def create_seat():
-    seats = Seat.query.all()
+    if request.method == 'GET':
+        seats = Seat.query.all()
+        return render_template('seats_view.html', seats=seats)
+    
     if request.method == 'POST':
         data = request.form
-        seat = Seat(
-            id = len(seats) + 1,
-            shop_id = data['shop_id'],
-            name = data['name'],
-            capacity = data['capacity'],
-        )
-        db.session.add(seat)
-        db.session.commit()
-    return render_template('seats_view.html', seats=seats)
+        # 名前とオーナーIDを基にShopテーブルから店舗を取得
+        shop = Shop.query.filter_by(name=data['shop_name'], owner_id=data['owner_id']).first()
+        
+        if shop:  # 店舗が存在する場合
+            # 新しい席情報を登録
+            seat = Seat(
+                shop_id=shop.id,
+                name=data['name'],
+                capacity=data['capacity'],
+            )
+            db.session.add(seat)
+            db.session.commit()
+
+            # 最新のデータを取得して表示
+            seats = Seat.query.all()
+            return render_template('seats_view.html', seats=seats)
+        
+        else:  # 店舗が存在しない場合
+            return render_template('seats_failed.html', message="指定された店舗またはオーナーが一致しませんでした。")
+
 
 @app.route('/register') #お店登録画面（削除予定）
 def register():
@@ -162,4 +177,4 @@ def result():
     
 
 
-    return render_template('results.html', results=results, genre=genre,)
+    return render_template('results.html', results=results, genre=genre)
