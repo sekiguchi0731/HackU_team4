@@ -185,6 +185,12 @@ def result():
                (genre.lower() in shop['genre'].lower()) and
                shop['seats_available'] > 0 and shop['distance'] < 50]
     
-
-
     return render_template('results.html', results=results, genre=genre)
+
+from flask import render_template, request
+
+@app.route('/reserve')
+def reserve_page():
+    # クエリパラメータからショップ名を取得
+    shop_name = request.args.get("shop_name", "不明なショップ")
+    return render_template("reserve.html", shop_name=shop_name)
