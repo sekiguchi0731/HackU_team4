@@ -61,6 +61,8 @@ def make_dis(pos1, pos2):
 
 def recommend_shops(user_lat, user_lng, preferred_category, current_time):
     # 例: "12:34" 形式で送られてくる想定
+    # frontからuser_lat/user_lngを受け取る
+    # frontから現在時刻を取得する予定
     current_time = datetime.strptime(current_time, "%H:%M").time()
 
     # DBからお店情報取得
