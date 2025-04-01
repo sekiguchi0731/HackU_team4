@@ -29,6 +29,9 @@ def recommend():
     response = json.dumps({"recommendations": recommendations}, ensure_ascii=False)
     return Response(response, content_type="application/json; charset=utf-8")
 
+@app.route('/recomend')
+def recomend_page():
+    return render_template('recomend.html')
 
 @app.route('/') #初期画面
 def index():
