@@ -13,7 +13,7 @@
             <th>店舗名</th>
             <th>住所</th>
             <th>電話番号</th>
-            <th>お店の種類</th>
+            <th>カテゴリ</th>
             <th>開店時間</th>
             <th>閉店時間</th>
             <th>オーナーID</th>
@@ -24,7 +24,7 @@
             <td>{{ shop.name }}</td>
             <td>{{ shop.address }}</td>
             <td>{{ shop.phone }}</td>
-            <td>{{ shop.genre }}</td>
+            <td>{{ shop.category }}</td>
             <td>{{ shop.opening_time }}</td>
             <td>{{ shop.closing_time }}</td>
             <td>{{ shop.owner_id }}</td>
@@ -40,8 +40,8 @@
         <input type="text" id="address" name="address" required>
         <label for="phone">電話番号:</label>
         <input type="text" id="phone" name="phone" required>
-        <label for="phone">お店の種類:</label>
-        <input type="text" id="genre" name="genre" required>
+        <label for="category">カテゴリ:</label>
+        <input type="text" id="category" name="category" required>
         <label for="opening_time">開店時間:</label>
         <input type="time" id="opening_time" name="opening_time" required>
         <label for="closing_time">閉店時間:</label>

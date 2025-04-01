@@ -57,9 +57,10 @@
     <div class="container">
         <h2>新規テーブル登録</h2>
         <form action="/seats" method="POST">
+            <input type="hidden" name="owner_id" value={{owner_id}}>
             <div class="form-group">
-                <label for="shop_id">店舗ID</label>
-                <input type="number" id="shop_id" name="shop_id" required>
+                <label for="shop_id">店舗名</label>
+                <input type="text" id="shop_name" name="shop_name" required>
             </div>
             <div class="form-group">
                 <label for="name">テーブル名</label>
