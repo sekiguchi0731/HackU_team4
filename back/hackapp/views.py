@@ -193,4 +193,15 @@ from flask import render_template, request
 def reserve_page():
     # クエリパラメータからショップ名を取得
     shop_name = request.args.get("shop_name", "不明なショップ")
-    return render_template("reserve.html", shop_name=shop_name)
+
+    # ショップ名に基づいて店舗を取得
+    shop = Shop.query.filter_by(name=shop_name).first()
+
+    if not shop:
+        return render_template("reserve.html", shop_name=shop_name, seats=[])
+
+    # 該当店舗の is_active=False の席を取得
+    inactive_seats = Seat.query.filter_by(shop_id=shop.id, is_active=True).all()
+
+    # 席情報をテンプレートに渡す
+    return render_template("reserve.html", shop_name=shop_name, seats=inactive_seats)
