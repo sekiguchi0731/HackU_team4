@@ -1,28 +1,28 @@
-import React, { useState } from "react";
+
+// src/GenresPage.tsx
+import React, { useState, useEffect } from "react";
 import './GenresPage.css'; // スタイルシートのインポート
 
-// カテゴリーデータ
-const categories = [
-  { name: "居酒屋" },
-  { name: "焼肉" },
-  { name: "イタリアン" },
-  { name: "中華料理" },
-  { name: "寿司" },
-  { name: "カフェ" },
-  { name: "ファミレス" },
-  { name: "ファストフード" },
-  { name: "韓国料理" }
-];
-
 const GenresPage: React.FC = () => {
-  const [search, setSearch] = useState<string>(""); // 検索バーの状態
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // 選ばれたカテゴリ
 
-  // 検索ボタンを押したときの処理
-  const handleSearch = () => {
-    console.log(`検索ワード: ${search}`);
-    alert(`検索ワード: ${search}`); // とりあえずアラートで確認（後でAPI連携などに変更可能）
-  };
+  const [search, setSearch] = useState(""); // 検索バーの状態
+  const [selectedCategory, setSelectedCategory] = useState<string>(""); // 選ばれたカテゴリ
+  const [categories, setCategories] = useState<{ name: string }[]>([]); // APIから取得するカテゴリ
+
+  // 初回マウント時にAPIからジャンルを取得
+  useEffect(() => {
+    fetch("http://localhost:5050/genres")
+      .then((res) => res.json())
+      .then((data: string[]) => {
+        // APIのレスポンス（例: ["居酒屋", "カフェ", ...]）を [{name: "..."}] の形式に変換
+        const formatted = data.map((name) => ({ name }));
+        setCategories(formatted);
+        console.log("取得したカテゴリ:", formatted); // ← console.log もここで！
+      })
+      .catch((err) => {
+        console.error("ジャンル取得エラー:", err);
+      });
+  }, []);
 
   return (
     <div className="container">
