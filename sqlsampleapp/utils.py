@@ -71,14 +71,17 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
         if not shop.address:
             print(f"Shop {shop.name} is missing an address.")
             continue
+
         shop_distance = make_dis(pos2, shop.address)
+
         if shop_distance is None:
             print(f"Could not calculate distance for shop {shop.name}.")
             continue
-        distance_score = max(0, 1 - shop_distance / 5)  # 5km以内なら加点
 
+        # 10km以内なら線形にスコア、10km以上は0
+        distance_score = max(0, 1 - shop_distance / 10)
         # カテゴリスコア
-        #category_score = 1.0 if hasattr(shop, 'category') and shop.category == preferred_category else 0.0
+        category_score = 1.0 if hasattr(shop, 'category') and shop.category == preferred_category else 0.0
 
         # 営業時間スコア
         try:
@@ -98,13 +101,13 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
         # 総合スコア（重みを調整可能）
         total_score = (
             0.4 * distance_score +
-            #0.3 * category_score +
+            0.3 * category_score +
             0.2 * time_score +
             0.1 * seat_score
         )
 
         if total_score > 0:
-            recommendations.append((shop.name, f"totalscore_{total_score}",f"distancescore_{distance_score}", f"timescore_{time_score}", f"seatscore_{seat_score}"))
+            recommendations.append((shop.name, f"totalscore_{total_score}",f"categoryscore_{category_score}",f"distancescore_{distance_score}", f"timescore_{time_score}", f"seatscore_{seat_score}"))
 
     # スコア順にソート
     recommendations.sort(key=lambda x: x[1], reverse=True)
