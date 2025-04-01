@@ -1,32 +1,35 @@
-
-// src/GenresPage.tsx
 import React, { useState, useEffect } from "react";
-import './GenresPage.css'; // スタイルシートのインポート
+import { useNavigate } from "react-router-dom"; // ← 追加
+import "./GenresPage.css";
 
 const GenresPage: React.FC = () => {
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [categories, setCategories] = useState<{ name: string }[]>([]);
 
-  const [search, setSearch] = useState(""); // 検索バーの状態
-  const [selectedCategory, setSelectedCategory] = useState<string>(""); // 選ばれたカテゴリ
-  const [categories, setCategories] = useState<{ name: string }[]>([]); // APIから取得するカテゴリ
+  const navigate = useNavigate(); // ← これで遷移関数を取得！
 
-  // 初回マウント時にAPIからジャンルを取得
   useEffect(() => {
     fetch("http://localhost:5050/genres")
       .then((res) => res.json())
       .then((data: string[]) => {
-        // APIのレスポンス（例: ["居酒屋", "カフェ", ...]）を [{name: "..."}] の形式に変換
         const formatted = data.map((name) => ({ name }));
         setCategories(formatted);
-        console.log("取得したカテゴリ:", formatted); // ← console.log もここで！
+        console.log("取得したカテゴリ:", formatted);
       })
       .catch((err) => {
         console.error("ジャンル取得エラー:", err);
       });
   }, []);
 
+  // カテゴリクリック時に遷移
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+    navigate("/match"); // ← 遷移！
+  };
+
   return (
     <div className="container">
-      {/* 検索エリア */}
       <div className="search-container">
         <input
           type="text"
@@ -35,18 +38,19 @@ const GenresPage: React.FC = () => {
           placeholder="場所を検索..."
           className="search-bar"
         />
-        <button className="search-button" onClick={handleSearch}>
+        <button className="search-button" onClick={() => navigate("/match")}>
           検索
         </button>
       </div>
 
-      {/* カテゴリーボタン */}
       <div className="category-grid">
         {categories.map((category) => (
           <div
             key={category.name}
-            className={`category-button ${selectedCategory === category.name ? "selected" : ""}`}
-            onClick={() => setSelectedCategory(category.name)}
+            className={`category-button ${
+              selectedCategory === category.name ? "selected" : ""
+            }`}
+            onClick={() => handleCategoryClick(category.name)} // ← ここで遷移
           >
             <p>{category.name}</p>
           </div>
@@ -54,6 +58,6 @@ const GenresPage: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default GenresPage;
