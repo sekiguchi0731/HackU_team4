@@ -9,11 +9,23 @@ from hackapp import app,db
 from hackapp.models.restaurants import User,Shop,Seat
 from geopy.distance import geodesic
 
-def make_dis(pos1, pos2):
+import requests
+import urllib.parse
+import re
+from geopy.distance import geodesic
+
+#経度，緯度の情報をもらう
+def make_dis(pos1, pos2): 
     makeUrl = "https://msearch.gsi.go.jp/address-search/AddressSearch?q="
-    
-    # 座標取得用のヘルパー関数
+
+    # 座標取得ヘルパー
     def get_coordinates(pos):
+        # posがタプル（緯度・経度）ならそのまま返す
+        if isinstance(pos, (tuple, list)) and len(pos) == 2:
+            lat, lng = pos
+            return lng, lat  # 緯度経度 → 経度緯度に変換
+
+        # posが文字列（住所）の場合はジオコーディング
         s_quote = urllib.parse.quote(pos)
         response = requests.get(makeUrl + s_quote)
         try:
@@ -22,35 +34,32 @@ def make_dis(pos1, pos2):
             print(f"レスポンスをJSONとしてパースできませんでした: {pos}")
             return None
         
-        # レスポンスが空の場合
         if not data:
-            #print(f"APIからデータが返ってきませんでした: {pos}")
+            print(f"APIからデータが返ってきませんでした: {pos}")
             return None
         
         try:
-            # 最初の結果から座標を取得
             longitude, latitude = data[0]["geometry"]["coordinates"]
             return longitude, latitude
         except (IndexError, KeyError) as e:
             print(f"座標取得中にエラーが発生しました ({pos}): {e}")
             return None
 
-    # pos1の座標取得
+    # 座標取得
     coord1 = get_coordinates(pos1)
-    if coord1 is None:
-        return None
-    # pos2の座標取得
     coord2 = get_coordinates(pos2)
-    if coord2 is None:
+
+    if coord1 is None or coord2 is None:
         return None
 
-    longitude1, latitude1 = coord1
-    longitude2, latitude2 = coord2
+    # 座標（経度緯度）→ geodesic の引数（緯度, 経度）形式に変換
+    lon1, lat1 = coord1
+    lon2, lat2 = coord2
 
-    # 距離の計算
-    distance = geodesic((latitude1, longitude1), (latitude2, longitude2))
-    
-    # 距離オブジェクトから数値部分を抽出して四捨五入（1桁）
+    # 距離計算
+    distance = geodesic((lat1, lon1), (lat2, lon2))
+
+    # 数値だけ抽出して四捨五入（小数1桁）
     match = re.search(r"[+-]?(?:\d+\.\d*|\.\d+|\d+\.)", str(distance))
     if match:
         num = round(float(match.group()), 1)
@@ -58,6 +67,7 @@ def make_dis(pos1, pos2):
     else:
         print("距離の数値を抽出できませんでした。")
         return None
+
 
 def recommend_shops(user_lat, user_lng, preferred_category, current_time):
     # 例: "12:34" 形式で送られてくる想定
@@ -71,13 +81,13 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
 
     # 位置比較用（本来なら user_lat/user_lng を使うべき）
     pos2 = '千葉県南房総市富浦町青木123-1'  # 仮の座標指定
-
+    user_pos = (user_lat, user_lng)
     for shop in shops:
         if not shop.address:
             print(f"Shop {shop.name} is missing an address.")
             continue
-
-        shop_distance = make_dis(pos2, shop.address)
+        
+        shop_distance = make_dis(user_pos, shop.address)
 
         if shop_distance is None:
             print(f"Could not calculate distance for shop {shop.name}.")
