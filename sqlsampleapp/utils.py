@@ -58,16 +58,19 @@ def make_dis(pos1, pos2):
     else:
         print("距離の数値を抽出できませんでした。")
         return None
+
 def recommend_shops(user_lat, user_lng, preferred_category, current_time):
-    # 現在の時刻をdatetimeオブジェクトに変換
+    # 例: "12:34" 形式で送られてくる想定
     current_time = datetime.strptime(current_time, "%H:%M").time()
 
-    # データベースからショップ情報を取得
+    # DBからお店情報取得
     shops = db.session.query(Shop).all()
     recommendations = []
-    pos2='千葉県南房総市富浦町青木123-1'
+
+    # 位置比較用（本来なら user_lat/user_lng を使うべき）
+    pos2 = '千葉県南房総市富浦町青木123-1'  # 仮の座標指定
+
     for shop in shops:
-        # 距離スコア
         if not shop.address:
             print(f"Shop {shop.name} is missing an address.")
             continue
@@ -78,12 +81,10 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
             print(f"Could not calculate distance for shop {shop.name}.")
             continue
 
-        # 10km以内なら線形にスコア、10km以上は0
         distance_score = max(0, 1 - shop_distance / 10)
-        # カテゴリスコア
+
         category_score = 1.0 if hasattr(shop, 'category') and shop.category == preferred_category else 0.0
 
-        # 営業時間スコア
         try:
             opening_time = datetime.strptime(shop.opening_time, "%H:%M").time()
             closing_time = datetime.strptime(shop.closing_time, "%H:%M").time()
@@ -92,13 +93,11 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
             print(f"Invalid time format for shop {shop.name}.")
             time_score = 0.0
 
-        # 空席スコア
         seats = db.session.query(Seat).filter(
             and_(Seat.shop_id == shop.id, Seat.is_active == True)
         ).all()
         seat_score = 1.0 if any(seat.capacity > 0 for seat in seats) else 0.0
 
-        # 総合スコア（重みを調整可能）
         total_score = (
             0.4 * distance_score +
             0.3 * category_score +
@@ -107,11 +106,19 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
         )
 
         if total_score > 0:
-            recommendations.append((shop.name, f"totalscore_{total_score}",f"categoryscore_{category_score}",f"distancescore_{distance_score}", f"timescore_{time_score}", f"seatscore_{seat_score}"))
+            recommendations.append({
+                "name": shop.name,
+                "total_score": total_score,
+                "category_score": category_score,
+                "distance_score": distance_score,
+                "time_score": time_score,
+                "seat_score": seat_score
+            })
 
-    # スコア順にソート
-    recommendations.sort(key=lambda x: x[1], reverse=True)
+    # スコアの高い順にソート
+    recommendations.sort(key=lambda x: x["total_score"], reverse=True)
     return recommendations
+
 
 pos1='石川県金沢市もりの里1丁目45-1'
 pos2='千葉県南房総市富浦町青木123-1'
