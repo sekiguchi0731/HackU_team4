@@ -9,7 +9,7 @@
 
 /* カード */
 .card {
-  width: 320px;
+  width: 400px;
   height: 420px; /* 高さを固定 */
   border: 1px solid #ccc;
   border-radius: 16px;
@@ -22,6 +22,15 @@
   flex-direction: column;
   justify-content: space-between; /* 上下の余白を均等に配置 */
   padding-bottom: 20px;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  margin: 10px auto;
 }
 
 /* 画像 */
@@ -44,8 +53,7 @@
 .button-container {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  padding: 10px 20px;
+  margin: 10px 20px;
   position: absolute;
   bottom: 20px;
   left: 0;
