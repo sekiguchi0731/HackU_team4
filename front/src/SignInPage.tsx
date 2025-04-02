@@ -21,7 +21,7 @@ const SignInPage: React.FC = () => {
 
     if (res.ok && data.status === "ok") {
       if (data.role === "customer") {
-        navigate("/search"); // お客さん用ページに遷移
+        navigate("/genres"); // お客さん用ページに遷移
       } else if (data.role === "owner") {
         navigate(`/owner/${data.owner_id}`); // 店主用ページに遷移
       }

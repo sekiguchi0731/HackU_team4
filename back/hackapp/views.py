@@ -1,6 +1,7 @@
 from typing import Literal
 from flask import render_template, request, jsonify
 from flask_cors import cross_origin
+from werkzeug.datastructures.structures import ImmutableMultiDict
 from hackapp import app,db
 from .models.restaurants import User,Shop,Seat
 from datetime import datetime
@@ -143,6 +144,40 @@ def create_shop():
 
     return render_template('shops_view.html', shops=shops)
 
+# shopの有無を確認するAPI
+@app.route("/owner/<int:owner_id>/check_shop", methods=["GET"])
+def check_owner_shop(owner_id) -> Response:
+    shop = Shop.query.filter_by(owner_id=owner_id).first()
+
+    if shop:
+        return jsonify({"has_shop": True, "shop_id": shop.id})
+    else:
+        return jsonify({"has_shop": False})
+
+# owner_idからshop_idを取得するAPI
+@app.route("/shops_by_owner/<int:owner_id>")
+def get_shops_by_owner(owner_id) -> tuple[Response, Literal[404]] | Response:
+    shops: list = Shop.query.filter_by(owner_id=owner_id).all()
+
+    if not shops:
+        return jsonify({"error": "店舗が見つかりません"})
+
+    return jsonify(
+        {
+            "shops": [
+                {
+                    "id": shop.id,
+                    "name": shop.name,
+                    "address": shop.address,
+                    "category": shop.category,
+                    "phone": shop.phone,
+                }
+                for shop in shops
+            ]
+        }
+    )
+
+
 @app.route('/seats_sign_up',methods=['GET','POST'])    #空席情報登録画面   
 def seats_sign_up():
     id = request.form.get("owner_id")
@@ -243,6 +278,25 @@ def create_seat():
         else:  # 店舗が存在しない場合
             return render_template('seats_failed.html', message="指定された店舗またはオーナーが一致しませんでした。")
 
+@app.route('/seats_register', methods=['POST'])    #空席情報登録画面から受け取った情報をDBに格納&表示
+def register_seat() -> tuple[Response, Literal[400]] | Response | tuple[Response, Literal[404]]:
+    data: ImmutableMultiDict[str, str] = request.form
+    shop_id: str | None = data.get("shop_id")
+    if not shop_id:
+        return jsonify({"error": "shop_idが必要です"}), 400
+
+    shop = Shop.query.get(shop_id)
+    if shop:
+        seat = Seat(
+            shop_id=shop.id,
+            name=data["name"],
+            capacity=data["capacity"],
+        )
+        db.session.add(seat)
+        db.session.commit()
+        return jsonify({"status": "ok", "message": "席を登録しました"})
+    else:
+        return jsonify({"status": "error", "message": "ショップが見つかりません"}), 404
 
 @app.route('/register') #お店登録画面（削除予定）
 def register():
