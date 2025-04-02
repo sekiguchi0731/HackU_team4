@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./DefaultPage.css"
 
 const DefaultPage: React.FC = () => {
-  const title = "Nijimatch".split("");
+  const title = "NijiMatch".split("");
   const navigate = useNavigate();
 
   const handleSignIn = () => {
