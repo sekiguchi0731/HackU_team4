@@ -1,3 +1,4 @@
+from typing import Literal
 from flask import render_template, request, jsonify
 from flask_cors import cross_origin
 from hackapp import app,db
@@ -66,8 +67,24 @@ def create_users():
 def sign_in():
     return render_template('sign_in.html')
 
-@app.route('/signed_in', methods=['POST'])  #ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
-def signed_in():
+@app.route('/signed_in', methods=['POST'])  # ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
+def signed_in() -> Response | tuple[Response, Literal[401]]:
+    data: dict[str, str] = request.get_json()
+    email: str | None = data.get("email")
+    password: str | None = data.get("password")
+
+    user: User | None = User.query.filter_by(email=email, password=password).first()
+    if user:
+        if user.role == "お客":
+            return jsonify({"status": "ok", "role": "customer", "email": email})
+        else:
+            return jsonify({"status": "ok", "role": "owner", "owner_id": user.id})
+    else:
+        return jsonify({"status": "error", "message": "ログイン失敗"}), 401
+
+
+@app.route('/debug_signed_in', methods=['POST'])  # ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
+def debug_signed_in():
     email = request.form.get('email')
     password = request.form.get('password')
 
