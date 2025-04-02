@@ -1,6 +1,5 @@
-// src/MatchingPage.tsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./MatchingPage.css";
 
 type Item = {
@@ -10,32 +9,19 @@ type Item = {
   image: string;
 };
 
-const items: Item[] = [
-  {
-    id: 1,
-    name: "Sushi Restaurant",
-    description: "Fresh sushi near the station 🍣",
-    image: "https://source.unsplash.com/300x200/?sushi",
-  },
-  {
-    id: 2,
-    name: "Ramen Shop",
-    description: "Spicy miso ramen available 🍜",
-    image: "https://source.unsplash.com/300x200/?ramen",
-  },
-  {
-    id: 3,
-    name: "Cafe Latte",
-    description: "Cozy cafe with great drinks ☕",
-    image: "https://source.unsplash.com/300x200/?cafe",
-  },
-];
-
 const MatchingPage: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const location = useLocation(); // useLocationを使用してデータを受け取る
   const navigate = useNavigate();
 
+  // recommendationsを受け取る
+  const items: Item[] = location.state?.recommendations || [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const handleSwipe = (direction: "left" | "right") => {
+    const currentItem = items[currentIndex];
+    if (currentItem) {
+      console.log(`現在の要素 - ID: ${currentItem.id}, 店名: ${currentItem.name}`);
+    }
     if (direction === "right") {
       navigate("/reserve");
     } else {
@@ -54,7 +40,6 @@ const MatchingPage: React.FC = () => {
       {currentItem && (
         <div className="card">
           <div className="card-container">
-
             <img
               src={currentItem.image}
               alt={currentItem.name}
