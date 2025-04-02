@@ -22,8 +22,6 @@ const OwnerDashboard: React.FC = () => {
       const data = await res.json();
       if (res.ok && data.shops) {
         setShops(data.shops);
-      } else {
-        alert("店舗が見つかりませんでした");
       }
     };
     fetchShops();

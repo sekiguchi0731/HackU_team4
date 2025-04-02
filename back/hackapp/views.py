@@ -160,7 +160,7 @@ def get_shops_by_owner(owner_id) -> tuple[Response, Literal[404]] | Response:
     shops: list = Shop.query.filter_by(owner_id=owner_id).all()
 
     if not shops:
-        return jsonify({"error": "店舗が見つかりません"}), 404
+        return jsonify({"error": "店舗が見つかりません"})
 
     return jsonify(
         {
