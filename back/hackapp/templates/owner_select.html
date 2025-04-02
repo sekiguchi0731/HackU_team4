@@ -20,9 +20,12 @@
             <button type="submit" class="btn btn-secondary">掲載</button>
         </div>
     </form>
-    <div class="text-center mt-4">
-        <a href="/users_sign_up" class="btn btn-secondary">掲載削除</a>
-    </div>
+    <form action="/seats_delete" method="POST">
+        <input type="hidden" name="owner_id" value={{owner_id}}>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-secondary">掲載削除</button>
+        </div>
+    </form>
 
 </div>
 </body>

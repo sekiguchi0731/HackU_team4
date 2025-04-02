@@ -132,6 +132,73 @@ def seats_sign_up():
     id = request.form.get("owner_id")
     return render_template('seats.html',owner_id = id)
 
+@app.route('/seats_delete', methods=['POST'])
+def seats_delete():
+    # フォームからオーナーIDを取得
+    owner_id = request.form.get("owner_id")
+    
+    # オーナーIDに紐付く全店舗を取得
+    shops = Shop.query.filter_by(owner_id=owner_id).all()
+    
+    if not shops:  # 店舗が見つからない場合
+        return render_template("error.html", message="指定されたオーナーに関連する店舗が見つかりません。")
+    
+    # 店舗IDに紐付くすべての座席情報を取得
+    seats = Seat.query.filter(Seat.shop_id.in_([shop.id for shop in shops]), Seat.is_active.is_(True)).all()
+    
+    if not seats:  # 座席が見つからない場合
+        return render_template("error.html", message="指定されたオーナーに関連する座席が見つかりません。")
+    
+    # テンプレートにデータを渡してレンダリング
+    return render_template('seats_delete.html', shops=shops, seats=seats)
+
+@app.route('/seats_delete_confirm', methods=['POST'])
+def seats_delete_confirm():
+    # フォームデータから座席IDを取得
+    seat_id = request.form.get("seat_id")
+
+    if not seat_id:
+        return render_template("error.html", message="座席IDが指定されていません。")
+
+    # 指定された座席情報を取得
+    seat = Seat.query.get(seat_id)
+    if not seat:
+        return render_template("error.html", message="指定された座席が見つかりません。")
+
+    # 座席のis_activeをFalseに設定して削除を実現
+    seat.is_active = False
+    try:
+        db.session.commit()  # データベースに変更を保存
+    except Exception as e:
+        db.session.rollback()
+        return render_template("error.html", message="座席を削除する際にエラーが発生しました。")
+
+    # 削除完了ページを表示
+    return render_template("seats_delete_success.html", message=f"座席ID {seat_id} を削除しました。")
+
+@app.route('/activate_all_seats', methods=['POST']) #デバッグ用、押すと全seatのis_activeがTrueになります。
+def activate_all_seats():
+    try:
+        # すべての座席を取得
+        seats = Seat.query.all()
+        
+        if not seats:  # 座席が見つからない場合
+            return jsonify({"message": "座席データが存在しません"}), 404
+        
+        # 各座席のis_activeをTrueに設定
+        for seat in seats:
+            seat.is_active = True
+        
+        # データベースに変更を保存
+        db.session.commit()
+
+        return jsonify({"message": "すべての座席を有効化しました"}), 200
+
+    except Exception as e:
+        # エラーが発生した場合はロールバック
+        db.session.rollback()
+        return jsonify({"message": "エラーが発生しました", "error": str(e)}), 500
+    
 @app.route('/seats', methods=['GET','POST'])    #空席情報登録画面から受け取った情報をDBに格納&表示
 def create_seat():
     if request.method == 'GET':
