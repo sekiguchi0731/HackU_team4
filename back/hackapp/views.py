@@ -143,6 +143,17 @@ def create_shop():
 
     return render_template('shops_view.html', shops=shops)
 
+# shopの有無を確認するAPI
+@app.route("/owner/<int:owner_id>/check_shop", methods=["GET"])
+def check_owner_shop(owner_id) -> Response:
+    shop = Shop.query.filter_by(owner_id=owner_id).first()
+
+    if shop:
+        return jsonify({"has_shop": True, "shop_id": shop.id})
+    else:
+        return jsonify({"has_shop": False})
+
+
 @app.route('/seats_sign_up',methods=['GET','POST'])    #空席情報登録画面   
 def seats_sign_up():
     id = request.form.get("owner_id")
