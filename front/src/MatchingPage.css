@@ -10,7 +10,7 @@
 /* カード */
 .card {
   width: 400px;
-  height: 420px; /* 高さを固定 */
+  height: 600px; /* 高さを固定 */
   border: 1px solid #ccc;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -40,21 +40,11 @@
   object-fit: cover;
 }
 
-/* カードの内容 */
-.card-content {
-  flex-grow: 1; /* 伸縮可能にして高さを均等にする */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 中央に揃える */
-  padding: 10px;
-}
-
 /* ボタンのコンテナ */
 .button-container {
   display: flex;
   justify-content: space-between;
   margin: 10px 20px;
-  position: absolute;
   bottom: 20px;
   left: 0;
   right: 0;

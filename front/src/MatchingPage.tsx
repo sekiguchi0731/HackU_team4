@@ -54,7 +54,6 @@ const MatchingPage: React.FC = () => {
       {currentItem && (
         <div className="card">
           <div className="card-container">
-
             <img
               src={currentItem.image}
               alt={currentItem.name}
@@ -62,20 +61,17 @@ const MatchingPage: React.FC = () => {
             />
             <h2>{currentItem.name}</h2>
             <p>{currentItem.description}</p>
-            <div className="button-container">
-              <button
-                className="nope-button"
-                onClick={() => handleSwipe("left")}
-              >
-                👎 Nope
-              </button>
-              <button
-                className="like-button"
-                onClick={() => handleSwipe("right")}
-              >
-                ❤️ Like
-              </button>
-            </div>
+          </div>
+          <div className="button-container">
+            <button className="nope-button" onClick={() => handleSwipe("left")}>
+              👎 Nope
+            </button>
+            <button
+              className="like-button"
+              onClick={() => handleSwipe("right")}
+            >
+              ❤️ Like
+            </button>
           </div>
         </div>
       )}
