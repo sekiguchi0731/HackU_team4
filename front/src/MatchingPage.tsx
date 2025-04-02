@@ -15,7 +15,7 @@ const items: Item[] = [
     id: 1,
     name: "Sushi Restaurant",
     description: "Fresh sushi near the station 🍣",
-    image: "https://source.unsplash.com/300x200/?sushi",
+    image: "/sushiya.png",
   },
   {
     id: 2,
