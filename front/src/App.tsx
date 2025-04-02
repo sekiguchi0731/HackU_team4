@@ -5,6 +5,7 @@ import DefaultPage from "./DefaultPage";
 import GenresPage from "./GenresPage";
 import MatchingPage from "./MatchingPage";
 import SignInPage from "./SignInPage";
+import SignUpPage from "./SignUpPage";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<DefaultPage />} />
         <Route path="/sign_in" element={<SignInPage />} />
+        <Route path="/sign_up" element={<SignUpPage />} />
         <Route path="/genres" element={<GenresPage />} />
         <Route path="/match" element={<MatchingPage />} />
         <Route path="/reserve" element={<div>予約ページへようこそ！</div>} />
