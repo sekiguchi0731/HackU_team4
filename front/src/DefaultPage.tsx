@@ -1,20 +1,19 @@
 // src/DefaultPage.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./DefaultPage.css"
 
 const DefaultPage: React.FC = () => {
+  const title = "Nijimatch".split("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/genres"); // 指定秒数後に遷移
-    }, 5000); // ← 5秒後に遷移（1000ms = 1秒）
+  const handleSignIn = () => {
+    navigate("/sign_in"); // React 内で画面遷移！
+  };
 
-    return () => clearTimeout(timer); // クリーンアップ
-  }, [navigate]);
-
-  const title = "Nijimatch".split("");
+  const handleSignUp = () => {
+    navigate("/sign_up"); // React 内で画面遷移！
+  };
 
   return (
     <div className="default-page">
@@ -26,10 +25,13 @@ const DefaultPage: React.FC = () => {
           </span>
         ))}
       </h2>
-      <p>Now loading genres...</p>
+
+      <div className="button-group">
+        <button onClick={handleSignUp}>新規登録</button>
+        <button onClick={handleSignIn}>サインイン</button>
+      </div>
     </div>
- 
-      );
+  );
 };
 
 export default DefaultPage;

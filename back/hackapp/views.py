@@ -1,3 +1,4 @@
+from typing import Literal
 from flask import render_template, request, jsonify
 from flask_cors import cross_origin
 from hackapp import app,db
@@ -42,6 +43,22 @@ def index():
 def users_sign_up():
     return render_template('users.html')
 
+@app.route("/signed_up", methods=["POST"])
+def signed_up() -> Response:
+    data: dict[str, str] = request.get_json()
+    user = User(
+        id=len(User.query.all()) + 1,
+        name=data["name"],
+        email=data["email"],
+        password=data["password"],
+        role=data["role"],
+        created_at=datetime.now(),
+        updated_at=datetime.now(),
+    )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"status": "ok", "message": "ユーザー登録完了"})
+
 @app.route('/users', methods=['GET', 'POST'])   #ユーザ登録画面から受け取ったパラメータをDBに登録した後に一覧表示する画面
 def create_users():
     users = User.query.all()
@@ -66,8 +83,24 @@ def create_users():
 def sign_in():
     return render_template('sign_in.html')
 
-@app.route('/signed_in', methods=['POST'])  #ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
-def signed_in():
+@app.route('/signed_in', methods=['POST'])  # ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
+def signed_in() -> Response | tuple[Response, Literal[401]]:
+    data: dict[str, str] = request.get_json()
+    email: str | None = data.get("email")
+    password: str | None = data.get("password")
+
+    user: User | None = User.query.filter_by(email=email, password=password).first()
+    if user:
+        if user.role == "お客":
+            return jsonify({"status": "ok", "role": "customer", "email": email})
+        else:
+            return jsonify({"status": "ok", "role": "owner", "owner_id": user.id})
+    else:
+        return jsonify({"status": "error", "message": "ログイン失敗"}), 401
+
+
+@app.route('/debug_signed_in', methods=['POST'])  # ログイン後の画面、ログイン失敗、お客、店主の3パターンからなる
+def debug_signed_in():
     email = request.form.get('email')
     password = request.form.get('password')
 

@@ -26,3 +26,5 @@ yarn-error.log*
 /front/.vite
 
 __pycache__
+
+/back/instance/*.db
