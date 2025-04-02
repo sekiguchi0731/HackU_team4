@@ -166,6 +166,7 @@ def search():
 def get_genres() -> Response:
     genres = db.session.query(Shop.category).distinct().all()
     genre_list = [g[0] for g in genres if g[0]]  # タプルから文字列を取り出す
+    print(genre_list)
     return jsonify(genre_list)
 
 
