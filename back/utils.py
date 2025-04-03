@@ -13,7 +13,7 @@ import requests
 import urllib.parse
 import re
 from geopy.distance import geodesic
-
+import logging
 #経度，緯度の情報をもらう
 def make_dis(pos1, pos2): 
     makeUrl = "https://msearch.gsi.go.jp/address-search/AddressSearch?q="
@@ -55,7 +55,7 @@ def make_dis(pos1, pos2):
     # 座標（経度緯度）→ geodesic の引数（緯度, 経度）形式に変換
     lon1, lat1 = coord1
     lon2, lat2 = coord2
-
+    print("user_pos:", coord1)
     # 距離計算
     distance = geodesic((lat1, lon1), (lat2, lon2))
 
@@ -69,24 +69,23 @@ def make_dis(pos1, pos2):
         return None
 
 
-def recommend_shops(user_lat, user_lng, preferred_category, current_time):
-    # 例: "12:34" 形式で送られてくる想定
-    # frontからuser_lat/user_lngを受け取る
-    # frontから現在時刻を取得する予定
+def recommend_shops(user_pos, preferred_category, current_time): 
+    """
+    user_pos: (lat, lng) タプルまたは 住所文字列
+    """
     current_time = datetime.strptime(current_time, "%H:%M").time()
+    print("debug: current_time:", current_time)
+    print("debug: user_pos:", user_pos)
 
-    # DBからお店情報取得
     shops = db.session.query(Shop).all()
     recommendations = []
 
-    # 位置比較用（本来なら user_lat/user_lng を使うべき）
-    pos2 = '千葉県南房総市富浦町青木123-1'  # 仮の座標指定
-    user_pos = (user_lat, user_lng)
     for shop in shops:
         if not shop.address:
             print(f"Shop {shop.name} is missing an address.")
             continue
-        
+
+        # user_posは(緯度, 経度)タプルでも、文字列でもmake_disが処理してくれる
         shop_distance = make_dis(user_pos, shop.address)
 
         if shop_distance is None:
@@ -127,10 +126,8 @@ def recommend_shops(user_lat, user_lng, preferred_category, current_time):
                 "seat_score": seat_score
             })
 
-    # スコアの高い順にソート
     recommendations.sort(key=lambda x: x["total_score"], reverse=True)
     return recommendations
-
 
 pos1='石川県金沢市もりの里1丁目45-1'
 pos2='千葉県南房総市富浦町青木123-1'
