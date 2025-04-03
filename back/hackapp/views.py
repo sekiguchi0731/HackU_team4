@@ -27,9 +27,28 @@ def recommend():
     if user_lat is None or user_lng is None or current_time is None:
         return jsonify({"error": "Missing required parameters"}), 400
 
-    # recommend_shops 関数を呼び出し
+    # デバッグ用ログ
+    print(f"位置情報: 緯度={user_lat}, 経度={user_lng}")
+    print(f"希望カテゴリ: {preferred_category}")
+    print(f"現在時刻: {current_time}")
+
+    # 推薦ロジックを呼び出し
     recommendations = utils.recommend_shops(user_lat, user_lng, preferred_category, current_time)
-    response = json.dumps({"recommendations": recommendations}, ensure_ascii=False)
+
+    # フロントエンドが期待する形式に変換
+    formatted_recommendations = [
+        {
+            "id": index + 1,  # IDを付与
+            "name": rec["name"],
+            "description": f"カテゴリスコア: {rec['category_score']:.2f}, 距離スコア: {rec['distance_score']:.2f}, 時間スコア: {rec['time_score']:.2f}, 席スコア: {rec['seat_score']:.2f}",
+            "image": f"https://source.unsplash.com/300x200/?{rec['name'].replace(' ', '%20')}"  # 店舗名を画像検索用にエンコード
+        }
+        for index, rec in enumerate(recommendations)
+    ]
+
+    # レスポンスを作成
+    response = json.dumps({"recommendations": formatted_recommendations}, ensure_ascii=False)
+    print(f"レスポンス: {response}")
     return Response(response, content_type="application/json; charset=utf-8")
 
 @app.route('/recomend')
