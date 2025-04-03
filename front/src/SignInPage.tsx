@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./SignInPage.css";
 
 const SignInPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +37,7 @@ const SignInPage: React.FC = () => {
       <h1 className="mb-4 text-center">ログイン画面</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">登録メールアドレス</label>
+          <label className="form-label">登録メールアドレスはなにかな？</label>
           <input
             type="email"
             className="form-control"
@@ -46,7 +47,7 @@ const SignInPage: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">パスワード</label>
+          <label className="form-label">パスワードを入力してねん♪</label>
           <input
             type="password"
             className="form-control"
