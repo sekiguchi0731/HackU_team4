@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GenresPage.css";
 
 const GenresPage: React.FC = () => {
-  const [search, setSearch] = useState(""); // 住所
-  const [selectedCategory, setSelectedCategory] = useState<string>(""); // 選択されたカテゴリ
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [categories, setCategories] = useState<{ name: string }[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ジャンルを取得
     fetch("http://localhost:5050/genres")
       .then((res) => res.json())
       .then((data: string[]) => {
@@ -23,41 +23,44 @@ const GenresPage: React.FC = () => {
       });
   }, []);
 
-  // カテゴリクリック時にrecommendエンドポイントにリクエストを送信
-  const handleCategoryClick = (categoryName: string) => {
+  const handleCategoryClick = async (categoryName: string) => {
+    if (!search) {
+      alert("検索バーに住所を入力してください。");
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 0);
+      return;
+    }
     setSelectedCategory(categoryName);
   
-    // 現在時刻を HH:MM 形式で取得
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const currentTime = `${hours}:${minutes}`;
   
-    // recommendエンドポイントにリクエストを送信
-    fetch(
-      `http://localhost:5050/recommend?user_lat=35.6895&user_lng=139.6917&preferred_category=${categoryName}&current_time=${currentTime}`,
-      {
-        method: "GET",
-      }
-    )
-      .then((res) => {
-        console.log("レスポンスステータス:", res.status);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("推薦結果:", data);
-        // 推薦結果を次のページに渡す（例: /match ページに遷移）
-        navigate("/match", { state: { recommendations: data.recommendations } });
-      })
-      .catch((err) => {
-        console.error("推薦エラー:", err);
-      });
+    try {
+      const encodedAddress = encodeURIComponent(search);
+      const response = await fetch(
+        `http://localhost:5050/recommend?user_pos=${encodedAddress}&preferred_category=${categoryName}&current_time=${currentTime}`
+      );
+  
+      console.log("レスポンスステータス:", response.status);
+      const data = await response.json();
+  
+      console.log("推薦結果:", data);
+      navigate("/match", { state: { recommendations: data.recommendations } });
+  
+    } catch (err) {
+      console.error("推薦リクエストエラー:", err);
+    }
   };
+
 
   return (
     <div className="container">
       <div className="search-container">
         <input
+          ref={searchInputRef}
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -66,7 +69,7 @@ const GenresPage: React.FC = () => {
         />
         <button
           className="search-button"
-          onClick={() => handleCategoryClick(selectedCategory)}
+          // onClick={handleSearchClick}
         >
           検索
         </button>
