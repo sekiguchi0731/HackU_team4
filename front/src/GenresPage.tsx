@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ← 追加
+import { useNavigate } from "react-router-dom";
 import "./GenresPage.css";
 
 const GenresPage: React.FC = () => {
@@ -7,7 +7,7 @@ const GenresPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [categories, setCategories] = useState<{ name: string }[]>([]);
 
-  const navigate = useNavigate(); // ← これで遷移関数を取得！
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:5050/genres")
@@ -25,11 +25,14 @@ const GenresPage: React.FC = () => {
   // カテゴリクリック時に遷移
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    navigate("/match"); // ← 遷移！
+    navigate("/match");
   };
 
   return (
     <div className="container">
+    
+      <h2 className="search-title">どんなお見せを探してるかな？</h2>
+
       <div className="search-container">
         <input
           type="text"
@@ -50,7 +53,7 @@ const GenresPage: React.FC = () => {
             className={`category-button ${
               selectedCategory === category.name ? "selected" : ""
             }`}
-            onClick={() => handleCategoryClick(category.name)} // ← ここで遷移
+            onClick={() => handleCategoryClick(category.name)}
           >
             <p>{category.name}</p>
           </div>
