@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import "./GenresPage.css";
 
 const GenresPage: React.FC = () => {
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [search, setSearch] = useState(""); // 住所
+  const [selectedCategory, setSelectedCategory] = useState<string>(""); // 選択されたカテゴリ
   const [categories, setCategories] = useState<{ name: string }[]>([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    // ジャンルを取得
     fetch("http://localhost:5050/genres")
       .then((res) => res.json())
       .then((data: string[]) => {
@@ -22,10 +23,10 @@ const GenresPage: React.FC = () => {
       });
   }, []);
 
-  // カテゴリクリック時に遷移
+  // カテゴリクリック時にrecommendエンドポイントにリクエストを送信
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    navigate("/match");
+    navigate("/match"); // ← 遷移！
   };
 
   return (
@@ -41,7 +42,10 @@ const GenresPage: React.FC = () => {
           placeholder="場所を検索..."
           className="search-bar"
         />
-        <button className="search-button" onClick={() => navigate("/match")}>
+        <button
+          className="search-button"
+          onClick={() => handleCategoryClick(selectedCategory)}
+        >
           検索
         </button>
       </div>
