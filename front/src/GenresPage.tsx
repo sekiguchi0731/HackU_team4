@@ -27,12 +27,15 @@ const GenresPage: React.FC = () => {
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
   
-    // 固定時刻を設定
-    const fixedTime = "15:00";
+    // 現在時刻を HH:MM 形式で取得
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
   
     // recommendエンドポイントにリクエストを送信
     fetch(
-      `http://localhost:5050/recommend?user_lat=35.6895&user_lng=139.6917&preferred_category=${categoryName}&current_time=${fixedTime}`,
+      `http://localhost:5050/recommend?user_lat=35.6895&user_lng=139.6917&preferred_category=${categoryName}&current_time=${currentTime}`,
       {
         method: "GET",
       }
