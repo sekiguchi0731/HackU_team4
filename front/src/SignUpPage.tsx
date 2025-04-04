@@ -44,7 +44,7 @@ const SignUpPage: React.FC = () => {
 
   return (
     <div className="container py-5">
-      <h2 className="text-center mb-4 signup-title">ユーザ登録をするよ！</h2>
+      <h2 className="text-center mb-4 signup-title">ユーザ登録画面</h2>
       <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 600 }}>
         <div className="mb-3">
           <label className="form-label">名前</label>
@@ -80,7 +80,7 @@ const SignUpPage: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">お見せかな？お客かな？</label>
+          <label className="form-label">お店かお客か選んでください</label>
           <select
             className="form-select"
             name="role"
@@ -89,7 +89,7 @@ const SignUpPage: React.FC = () => {
             required
           >
             <option value="" disabled>
-              どちらか選んでね
+              どちらか選んでください
             </option>
             <option value="お客">お客</option>
             <option value="店主">店主</option>
