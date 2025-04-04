@@ -72,55 +72,71 @@ def make_dis(pos1, pos2):
 from datetime import datetime
 from sqlalchemy import and_, exists
 
+# SQLがDATA型ではないため苦肉の策
+def is_open(opening_str, closing_str, current_time):
+    try:
+        opening = datetime.strptime(opening_str, "%H:%M").time()
+        closing = datetime.strptime(closing_str, "%H:%M").time()
+    except ValueError:
+        return False
+
+    if opening < closing:
+        return opening <= current_time <= closing
+    else:
+        # 例：20:00〜02:00 のような深夜営業に対応
+        return current_time >= opening or current_time <= closing
+def get_unsplash_image_url(query="sushi"):
+    try:
+        url = f"https://source.unsplash.com/300x200/?{query}"
+        response = requests.get(url, allow_redirects=True)
+        return response.url  # 最終的な画像のURL
+    except Exception as e:
+        print("画像取得エラー:", e)
+        return "https://via.placeholder.com/300x200?text=No+Image"
 def recommend_shops(user_pos, preferred_category, current_time):
-    current_time = datetime.strptime(current_time, "%H:%M").time()
-    current_time_str = current_time.strftime("%H:%M")
+    current_time_obj = datetime.strptime(current_time, "%H:%M").time()
 
-    print("debug: current_time:", current_time)
-    print("debug: user_pos:", user_pos)
-
-    # ShopとSeatをJOINして、空席数(capacity合計)をGROUP BYで計算
+    # カテゴリ + 空席あり のショップをSQLで絞り込む（営業時間はここでは見ない）
     results = db.session.query(
         Shop.id,
         Shop.name,
         Shop.address,
+        Shop.opening_time,
+        Shop.closing_time,
+        Shop.category,
         func.sum(Seat.capacity).label("total_available_capacity")
     ).join(Seat, Shop.id == Seat.shop_id
     ).filter(
         and_(
             Shop.category == preferred_category,
-            Shop.opening_time <= current_time_str,
-            Shop.closing_time >= current_time_str,
             Seat.is_active == True,
             Seat.capacity > 0
         )
     ).group_by(Shop.id).all()
-
-    print("debug: filtered_shops with capacity sum:", results)
-
+    print(results)
     recommendations = []
 
-    for shop_id, name, address, total_capacity in results:
+    for shop_id, name, address, opening_time, closing_time, category, total_capacity in results:
         if not address:
-            print(f"Shop {name} is missing an address.")
+            continue
+        if not is_open(opening_time, closing_time, current_time_obj):
             continue
 
         shop_distance = make_dis(user_pos, address)
         if shop_distance is None:
-            print(f"Could not calculate distance for shop {name}.")
             continue
 
         recommendations.append({
             "shop_id": shop_id,
             "name": name,
             "distance": shop_distance,
-            "total_available_capacity": total_capacity
+            "total_available_capacity": total_capacity,
+            "category": category  # あとで画像生成にも使える
         })
 
+    # 距離が近い順に並べる
     recommendations.sort(key=lambda x: x["distance"])
-    print("debug: recommendations:", recommendations)
     return recommendations
-
 pos1='石川県金沢市もりの里1丁目45-1'
 pos2='千葉県南房総市富浦町青木123-1'
 
