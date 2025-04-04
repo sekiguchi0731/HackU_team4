@@ -14,43 +14,46 @@ def load_data():
 
 @app.route("/recommend", methods=["GET"])
 def recommend():
-    """
-    ユーザーの位置情報、希望カテゴリ、現在時刻を受け取り、ショップを推薦するエンドポイント
-    """
-    # クエリパラメータを取得
     user_lat = request.args.get("user_lat", type=float)
     user_lng = request.args.get("user_lng", type=float)
+    user_pos = request.args.get("user_pos", type=str)
     preferred_category = request.args.get("preferred_category", type=str, default="")
     current_time = request.args.get("current_time", type=str)
 
-    # 必須パラメータのチェック
-    if user_lat is None or user_lng is None or current_time is None:
-        return jsonify({"error": "Missing required parameters"}), 400
+    if (user_lat is None or user_lng is None) and not user_pos:
+        return jsonify({"error": "位置情報（緯度経度）または住所が必要です"}), 400
+    if not current_time:
+        return jsonify({"error": "現在時刻が必要です"}), 400
 
-    # デバッグ用ログ
-    print(f"位置情報: 緯度={user_lat}, 経度={user_lng}")
+    if user_lat is not None and user_lng is not None:
+        user_location = (user_lat, user_lng)
+        print(f"緯度経度で受信: 緯度={user_lat}, 経度={user_lng}")
+    else:
+        user_location = user_pos
+        print(f"住所で受信: {user_pos}")
+
     print(f"希望カテゴリ: {preferred_category}")
     print(f"現在時刻: {current_time}")
 
-    # 推薦ロジックを呼び出し
-    recommendations = utils.recommend_shops(user_lat, user_lng, preferred_category, current_time)
+    # ✅ 修正済み：引数3つで呼ぶ
+    recommendations = utils.recommend_shops(user_location, preferred_category, current_time)
 
-    # フロントエンドが期待する形式に変換
     formatted_recommendations = [
         {
-            "id": index + 1,  # IDを付与
+            "id": index + 1,
             "name": rec["name"],
-            "description": f"カテゴリスコア: {rec['category_score']:.2f}, 距離スコア: {rec['distance_score']:.2f}, 時間スコア: {rec['time_score']:.2f}, 席スコア: {rec['seat_score']:.2f}",
-            "image": f"https://source.unsplash.com/300x200/?{rec['name'].replace(' ', '%20')}"  # 店舗名を画像検索用にエンコード
+            "description": (
+                f"距離スコア: {rec['distance']:.2f}, "
+                f"空席数: {rec['total_available_capacity']}, "
+            ),
+            "image": f"https://source.unsplash.com/300x200/?{rec['name'].replace(' ', '%20')}"
         }
         for index, rec in enumerate(recommendations)
     ]
 
-    # レスポンスを作成
     response = json.dumps({"recommendations": formatted_recommendations}, ensure_ascii=False)
     print(f"レスポンス: {response}")
     return Response(response, content_type="application/json; charset=utf-8")
-
 @app.route('/recomend')
 def recomend_page():
     return render_template('recomend.html')
