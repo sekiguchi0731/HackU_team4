@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./DefaultPage.css";
-import logo from "./assets/logo.png"; // ← 画像のパス（Vite対応）
+import logo from "./assets/logo.png";
 
 const DefaultPage: React.FC = () => {
   const title = "NijiMatch".split("");
@@ -18,13 +18,7 @@ const DefaultPage: React.FC = () => {
 
   return (
     <div className="default-page">
-      {/* ヘッダー画像追加！ */}
-      <div className="header-logo">
-        <img src={logo} alt="NijiMatch Logo" className="logo-image" />
-      </div>
-
-      <h1>Welcome!</h1>
-
+      {/* NijiMatch アニメーションタイトル */}
       <h2 className="nijimatch">
         {title.map((char, index) => (
           <span key={index} style={{ animationDelay: `${index * 0.1}s` }}>
@@ -33,6 +27,12 @@ const DefaultPage: React.FC = () => {
         ))}
       </h2>
 
+      {/* ロゴ画像 */}
+      <div className="header-logo">
+        <img src={logo} alt="NijiMatch Logo" className="logo-image" />
+      </div>
+
+      {/* ボタン群 */}
       <div className="button-group">
         <button onClick={handleSignUp}>新規登録</button>
         <button onClick={handleSignIn}>サインイン</button>
