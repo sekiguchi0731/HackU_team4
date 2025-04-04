@@ -1,6 +1,7 @@
 // src/OwnerDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "./OwnerDashboard.css"
 
 type Shop = {
   id: number;
@@ -28,34 +29,27 @@ const OwnerDashboard: React.FC = () => {
   }, [owner_id]);
 
   return (
-    <div className="container py-5">
+    <div className="container dashboard-container">
       <h2 className="text-center mb-4">店舗一覧（店主ID: {owner_id}）</h2>
-
-      <div className="text-end mb-4">
-        <button
-          className="btn btn-success"
-          onClick={() => navigate(`/owner/${owner_id}/shop_sign_up`)}
-        >
-          ＋ 新規店舗を追加
-        </button>
-      </div>
-
+      <button
+        className="btn-add-shop"
+        onClick={() => navigate(`/owner/${owner_id}/shop_sign_up`)}
+      >
+        ＋ 新規店舗を追加
+      </button>
       {shops.length === 0 ? (
         <p>まだ店舗が登録されていません。</p>
       ) : (
-        <ul className="list-group">
+        <ul className="list-group w-100">
           {shops.map((shop) => (
-            <li
-              key={shop.id}
-              className="list-group-item d-flex justify-content-between align-items-center"
-            >
-              <div>
+            <li key={shop.id} className="list-group-item">
+              <div className="shop-info">
                 <strong>{shop.name}</strong>（{shop.category}）
                 <br />
                 住所: {shop.address}
               </div>
               <button
-                className="btn btn-primary"
+                className="btn-add-shop"
                 onClick={() =>
                   navigate(`/owner/${owner_id}/seats?shop_id=${shop.id}`)
                 }
