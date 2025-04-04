@@ -1,6 +1,20 @@
 /* ユーザ登録のタイトルをオレンジにする */
 .text-center {
-    color: #FF8C00; /* オレンジ */
-    font-weight: bold; /* 文字を少し強調 */
-  }
+  color: #FF8C00; /* オレンジ */
+  font-weight: bold; /* 文字を少し強調 */
+  text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
+}
+
+.btn-sign-up {
+  border: none;
+  margin-top: 1rem;
+  background-color: #FF8C00;
+  color: white;
+  border-radius: 5px;
+}
+
+.btn-sign-up:hover {
+  background-color: blanchedalmond;
+  color: #FF8C00;
+}
   
