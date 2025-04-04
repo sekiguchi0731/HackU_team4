@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-type Shop = {
-  id: number;
-  name: string;
-};
+// type Shop = {
+//   id: number;
+//   name: string;
+// };
 
 const SeatRegisterPage: React.FC = () => {
   const { owner_id } = useParams();
   const navigate = useNavigate();
 
-  const [shops, setShops] = useState<Shop[]>([]);
+  // const [shops, setShops] = useState<Shop[]>([]);
   const [selectedShopId, setSelectedShopId] = useState<string>("");
   const [seatName, setSeatName] = useState("");
   const [capacity, setCapacity] = useState<string>("1"); // ← 文字列に変更
@@ -25,7 +25,7 @@ const SeatRegisterPage: React.FC = () => {
       const data = await res.json();
 
       if (res.ok && data.shops && data.shops.length > 0) {
-        setShops(data.shops);
+        // setShops(data.shops);
         setSelectedShopId(data.shops[0].id.toString()); // 最初の店舗を初期選択
       } else {
         alert("店舗が見つかりませんでした。");
@@ -75,7 +75,7 @@ const SeatRegisterPage: React.FC = () => {
         className="mx-auto"
         style={{ maxWidth: 600 }}
       >
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label className="form-label">店舗を選択</label>
           <select
             className="form-select"
@@ -89,7 +89,7 @@ const SeatRegisterPage: React.FC = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className="mb-3">
           <label className="form-label">席の名前</label>
