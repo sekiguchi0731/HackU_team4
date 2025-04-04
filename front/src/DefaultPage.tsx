@@ -32,9 +32,6 @@ const DefaultPage: React.FC = () => {
         <img src={logo} alt="NijiMatch Logo" className="logo-image" />
       </div>
 
-      {/* Welcome テキスト */}
-      <h1>Welcome!</h1>
-
       {/* ボタン群 */}
       <div className="button-group">
         <button onClick={handleSignUp}>新規登録</button>

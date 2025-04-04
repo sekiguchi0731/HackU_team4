@@ -51,61 +51,36 @@ body {
   }
 }
 
-/* --- ロゴ画像 --- */
 .header-logo {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem; /* ボタンとの間隔 */
 }
 
-.logo-image {
-  height: 280px; /* ロゴの高さを少し大きく */
-  max-width: 100%; /* 横幅を少し広げる */
-  object-fit: contain;
-}
-
-
-/* --- Welcome テキスト --- */
-.default-page h1 {
-  color: #FF8C00;
-  font-size: 8rem;  /* フォントサイズを大きく */
-  margin-bottom: 2rem; /* ボトムマージンを調整 */
-  text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
-}
-
-/* --- 新規登録とサインインボタン --- */
 .button-group {
   display: flex;
   flex-direction: column;
-  gap: 20px;  /* ボタン間の間隔を広げる */
-  margin-top: 10px;  /* ボタンを「Welcome」テキストに近づける */
-}
-
-/* --- 新規登録とサインインボタン --- */
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;  /* ボタン間の間隔を広げる */
-  margin-top: 10px;  /* ボタンを「Welcome」テキストに近づける */
+  gap: 24px;  /* ボタン間の間隔を広げる */
+  margin-top: 10px;
 }
 
 .button-group button {
-  padding: 22px 44px;  /* ボタンのパディングをさらに大きく */
-  font-size: 1.5rem;    /* ボタンのフォントサイズをさらに大きく */
+  padding: 22px 60px;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #333;
-  background-color: #ffffff;
+  color: white;
+  background-color: #FFA24D;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+
+  min-width: 220px;
+  width: 32%;
+  max-width: 420px;
 }
 
-.button-group button:hover {
-  background-color: #ffb163;
-  transform: translateY(-2px);
-}
 
 /* --- レスポンシブ対応 --- */
 
