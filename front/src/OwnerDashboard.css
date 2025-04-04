@@ -16,22 +16,37 @@
   text-align: center;
 }
 
-/* --- 店舗一覧タイトル --- */
-h2 {
-  color: #FF6B81; /* ピンクで統一 */
-  font-weight: 600;
-  font-size: 2rem;
+/* --- 前のページに戻るボタン --- */
+.btn-back {
+  margin-top: 1rem;  /* ここで位置調整 */
   margin-bottom: 1rem;
-  text-shadow: 1px 1px 3px rgba(255, 107, 129, 0.2);
+  background-color: #ff8c00; /* 新規店舗と同じオレンジ色 */
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 12px 24px;  /* 新規店舗ボタンより少し小さく */
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  max-width: 320px;  /* 最大幅を設定 */
   width: 100%;
-  margin-top: 0;
   display: block;
-  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-back:hover {
+  background-color: #ffa733;
+  color: white;
+  border: none;
+  transform: scale(1.05);
 }
 
 /* --- 新規店舗を追加ボタン --- */
 .btn-add-shop {
-  margin: 1rem 0 1rem auto;
+  margin-top: 2rem; /* ボタン間のスペースを調整 */
+  margin-bottom: 1rem;
   background-color: #ff8c00;
   border-radius: 5px;
   color: white;
@@ -42,10 +57,10 @@ h2 {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   max-width: 320px;  /* 最大幅を設定 */
-  width: 100%;  /* 親要素に合わせる */
-  display: block;  /* ブロック表示 */
-  margin-left: auto; /* 左右のマージンを自動設定 */
-  margin-right: auto; /* 左右のマージンを自動設定 */
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-add-shop:hover {
@@ -90,7 +105,7 @@ strong {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   max-width: 300px;
-  width: 100%;  /* 親要素に合わせる */
+  width: 100%;
   display: inline-block;
 }
 
@@ -118,7 +133,7 @@ p {
     font-size: 1.8rem;
   }
 
-  .btn-add-shop, .btn-add-seat {
+  .btn-add-shop, .btn-add-seat, .btn-back {
     padding: 12px 22px;
     font-size: 1rem;
   }
@@ -134,10 +149,10 @@ p {
     font-size: 1.5rem;
   }
 
-  .btn-add-shop, .btn-add-seat {
+  .btn-add-shop, .btn-add-seat, .btn-back {
     padding: 12px 20px;
     font-size: 1rem;
-    max-width: 90%;  /* 幅を90%に制限 */
+    max-width: 90%;
   }
 
   .list-group-item {
@@ -151,10 +166,10 @@ p {
     font-size: 1.3rem;
   }
 
-  .btn-add-shop, .btn-add-seat {
+  .btn-add-shop, .btn-add-seat, .btn-back {
     padding: 10px 18px;
     font-size: 0.9rem;
-    max-width: 90%;  /* 幅を90%に制限 */
+    max-width: 90%;
   }
 
   .list-group-item {

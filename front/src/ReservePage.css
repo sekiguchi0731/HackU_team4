@@ -1,0 +1,148 @@
+/* --- コンテナ --- */
+.container {
+    background: linear-gradient(135deg, #FFF5E1, #FFDAB9); /* グラデ背景 */
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;  /* コンテンツが上に寄せられるように */
+    width: 100%;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center;
+    overflow-y: auto; /* スクロール対応 */
+    text-align: center;
+  }
+  
+  /* --- 店舗名表示 --- */
+  h1 {
+    color: #FF6B81; /* ピンクで統一 */
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(255, 107, 129, 0.2);
+  }
+  
+  /* --- 予約確定ボタン --- */
+.btn-orange {
+    background-color: #FFA24D; /* 背景色をオレンジに */
+    border: 2px solid #FFA24D; /* オレンジ色の枠線 */
+    border-radius: 14px; /* 角を丸く */
+    color: white; /* 文字色を白に */
+    padding: 22px 60px; /* パディングを大きめに */
+    font-size: 1.8rem; /* フォントサイズを大きめに */
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    min-width: 220px;
+    width: 32%; /* ボタンの幅を調整 */
+    max-width: 420px;
+  }
+  
+  .btn-orange:hover {
+    background-color: #FF8A24; /* ホバー時に少し濃いオレンジ色に */
+    color: white; /* 文字色は変わらず白 */
+    transform: scale(1.05); /* ホバー時に少し大きくなる */
+  }
+  
+  .btn-orange:focus {
+    outline: none; /* フォーカス時のアウトライン消去 */
+  }
+  
+  /* --- 予約完了メッセージ --- */
+  .message-success {
+    color: #FF6B81; /* ピンク色 */
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  /* --- 利用可能な席のメッセージ --- */
+  .available-seats {
+    color: #FFA24D; /* オレンジ色 */
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  
+  /* --- メッセージ --- */
+  p {
+    font-size: 1.1rem;
+    color: #FF6B81;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  
+  /* --- 席のリスト --- */
+  .list-group {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list-group-item {
+    background-color: #FFF;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list-group-item input {
+    margin-right: 10px;
+  }
+  
+  .list-group-item label {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  strong {
+    color: #FF6B81;
+    font-weight: bold;
+  }
+  
+  /* --- メッセージ --- */
+  p {
+    font-size: 1.1rem;
+    color: #FF6B81;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  /* --- レスポンシブ対応 --- */
+  @media (max-width: 768px) {
+    .btn-orange {
+      padding: 12px 20px;
+      font-size: 1rem;
+      width: 90%;
+    }
+  
+    .list-group-item {
+      padding: 10px;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .btn-orange {
+      padding: 10px 18px;
+      font-size: 0.9rem;
+    }
+  
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  

@@ -18,3 +18,18 @@
   color: #FF8C00;
 }
   
+.btn-back {
+  border: none;
+  background-color: #FF8C00;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-back:hover {
+  background-color: blanchedalmond;
+  color: #FF8C00;
+  transform: scale(1.03);
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import "./ReservePage.css";
 
 type Seat = {
   id: number;
@@ -10,6 +11,7 @@ type Seat = {
 const ReservePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const shopId = searchParams.get("shop_id");
+  const navigate = useNavigate();  // useNavigate フックの追加
 
   const [shopName, setShopName] = useState("");
   const [seats, setSeats] = useState<Seat[]>([]);
@@ -35,7 +37,7 @@ const ReservePage: React.FC = () => {
         }
       } catch (error) {
         console.error("通信エラー:", error);
-        setMessage( "通信エラーが発生しました。");
+        setMessage("通信エラーが発生しました。");
       }
     };
 
@@ -73,6 +75,11 @@ const ReservePage: React.FC = () => {
     }
   };
 
+  // 戻るボタンのクリックイベント
+  const handleBack = () => {
+    navigate(-1);  // 前のページに戻る
+  };
+
   return (
     <div className="container py-5">
       <h1 className="mb-4 text-center">予約ページ</h1>
@@ -82,7 +89,7 @@ const ReservePage: React.FC = () => {
 
       {seats.length > 0 ? (
         <form onSubmit={handleSubmit}>
-          <h3 className="mt-4">利用可能な席</h3>
+          <h3 className="mt-4 available-seats">利用可能な席</h3>
           <ul className="list-group">
             {seats.map((seat) => (
               <li className="list-group-item" key={seat.id}>
@@ -102,7 +109,7 @@ const ReservePage: React.FC = () => {
             ))}
           </ul>
           <div className="text-center mt-4">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn-orange">
               予約を確定する
             </button>
           </div>
@@ -111,7 +118,13 @@ const ReservePage: React.FC = () => {
         <p className="text-center mt-4">現在、利用可能な席はありません。</p>
       )}
 
-      {message && <p className="text-center mt-3 text-info">{message}</p>}
+      {message && <p className="text-center mt-3 message-success">{message}</p>}
+
+      <div className="text-center mt-4">
+        <button type="button" className="btn-orange" onClick={handleBack}>
+          前のページに戻る
+        </button>
+      </div>
     </div>
   );
 };
