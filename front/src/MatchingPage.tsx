@@ -4,6 +4,7 @@ import "./MatchingPage.css";
 
 type Item = {
   id: number;
+  shop_id: number;
   name: string;
   description: string;
   image: string;
@@ -23,7 +24,7 @@ const MatchingPage: React.FC = () => {
       console.log(`現在の要素 - ID: ${currentItem.id}, 店名: ${currentItem.name}`);
     }
     if (direction === "right") {
-      navigate("/reserve");
+      navigate(`/reserve?shop_id=${currentItem.shop_id}`);
     } else {
       if (currentIndex < items.length - 1) {
         setCurrentIndex((prev) => prev + 1);

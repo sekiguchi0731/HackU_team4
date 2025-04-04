@@ -14,6 +14,13 @@ import urllib.parse
 import re
 from geopy.distance import geodesic
 import logging
+import requests
+from PIL import Image
+from io import BytesIO
+from urllib.parse import quote
+import base64
+from datetime import datetime
+from sqlalchemy import and_, exists
 #経度，緯度の情報をもらう
 def make_dis(pos1, pos2): 
     makeUrl = "https://msearch.gsi.go.jp/address-search/AddressSearch?q="
@@ -69,8 +76,7 @@ def make_dis(pos1, pos2):
         return None
 
 
-from datetime import datetime
-from sqlalchemy import and_, exists
+
 
 # SQLがDATA型ではないため苦肉の策
 def is_open(opening_str, closing_str, current_time):
@@ -85,14 +91,72 @@ def is_open(opening_str, closing_str, current_time):
     else:
         # 例：20:00〜02:00 のような深夜営業に対応
         return current_time >= opening or current_time <= closing
-def get_unsplash_image_url(query="sushi"):
+import random
+from urllib.parse import quote
+
+
+def get_pixabay_cropped_images(query: str, num_images: int = 5, width: int = 300, height: int = 200) -> list[str]:
+    """
+    Pixabayから画像を検索し、指定サイズにトリミングして、base64形式で返す
+    """
+    API_KEY = ""
+    query_encoded = quote(query)
+    url = (
+        f"https://pixabay.com/api/"
+        f"?key={API_KEY}"
+        f"&q={query_encoded}"
+        f"&image_type=photo"
+        f"&per_page={num_images}"
+        f"&safesearch=true"
+    )
+
     try:
-        url = f"https://source.unsplash.com/300x200/?{query}"
-        response = requests.get(url, allow_redirects=True)
-        return response.url  # 最終的な画像のURL
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        if res.status_code != 200:
+            print("Pixabay APIエラー:", res.status_code)
+            return []
+
+        data = res.json()
+        hits = data.get("hits", [])
+        image_urls = [img["webformatURL"] for img in hits]
+
+        # 取得した画像URLをリサイズしてbase64で返す
+        cropped_images_base64 = []
+        for url in image_urls:
+            img = download_and_crop_image(url, width, height)
+            if img:
+                base64_img = encode_image_to_base64(img)
+                cropped_images_base64.append(base64_img)
+
+        return cropped_images_base64
+
     except Exception as e:
-        print("画像取得エラー:", e)
-        return "https://via.placeholder.com/300x200?text=No+Image"
+        print("画像取得失敗:", e)
+        return []
+
+def download_and_crop_image(url: str, width: int = 300, height: int = 200) -> Image.Image:
+    """
+    URLから画像をダウンロードし、指定サイズにリサイズ（中央トリミング）
+    """
+    try:
+        response = requests.get(url)
+        img = Image.open(BytesIO(response.content)).convert("RGB")
+
+        # アスペクト比無視でサイズ変更（中央クロップしたいなら別ロジックも可能）
+        img = img.resize((width, height), Image.LANCZOS)
+        return img
+    except Exception as e:
+        print("画像処理エラー:", e)
+        return None
+
+def encode_image_to_base64(img: Image.Image) -> str:
+    """
+    Pillow画像をbase64エンコードしてdata URLにする
+    """
+    buffer = BytesIO()
+    img.save(buffer, format="JPEG")
+    encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return f"data:image/jpeg;base64,{encoded}"
 def recommend_shops(user_pos, preferred_category, current_time):
     current_time_obj = datetime.strptime(current_time, "%H:%M").time()
 
