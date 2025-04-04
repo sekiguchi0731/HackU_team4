@@ -21,6 +21,8 @@ body {
 /* フォームのデザイン */
 form {
   background: rgba(255, 218, 185, 0.9);
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -40,30 +42,32 @@ h1 {
 .form-label {
   font-weight: bold;
   color: #FF6B81;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 /* 入力フィールド */
 .form-control {
   padding: 0.75rem;
   font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ffb163;
-  margin-top: 0.5rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  font-size: 1rem;
+  gap: 0px;
 }
 
 /* ログインボタンのデザイン */
-.btn-primary {
+.btn-sign-in {
     background-color: #FF8C00 !important; /* オレンジに強制 */
     border: none;
-    padding: 0.75rem;
-    font-size: 1.2rem;
-    border-radius: 25px;
+    border-radius: 7px;
     width: 100%;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     color: white;
-    margin-top: 1rem;
   }
   
   .btn-primary:hover {
@@ -78,10 +82,7 @@ h1 {
   
 /* 前の画面に戻るボタンのデザイン */
 .btn-secondary {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border-radius: 25px;  /* 丸みを強調 */
+  border-radius: 7px;  /* 丸みを強調 */
   width: 100%;
   background-color: #ffffff;
   border: none;
@@ -98,10 +99,6 @@ h1 {
 .btn-secondary:active {
   background-color: #e77c00;
   transform: translateY(2px);  /* クリック時のエフェクト */
-}
-
-.d-grid {
-  margin-top: 1rem;
 }
 
 .text-center {
