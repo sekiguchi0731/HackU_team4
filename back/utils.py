@@ -14,6 +14,13 @@ import urllib.parse
 import re
 from geopy.distance import geodesic
 import logging
+import requests
+from PIL import Image
+from io import BytesIO
+from urllib.parse import quote
+import base64
+from datetime import datetime
+from sqlalchemy import and_, exists
 #経度，緯度の情報をもらう
 def make_dis(pos1, pos2): 
     makeUrl = "https://msearch.gsi.go.jp/address-search/AddressSearch?q="
@@ -69,8 +76,7 @@ def make_dis(pos1, pos2):
         return None
 
 
-from datetime import datetime
-from sqlalchemy import and_, exists
+
 
 # SQLがDATA型ではないため苦肉の策
 def is_open(opening_str, closing_str, current_time):
@@ -87,7 +93,12 @@ def is_open(opening_str, closing_str, current_time):
         return current_time >= opening or current_time <= closing
 import random
 from urllib.parse import quote
-def get_pixabay_images(query: str, num_images: int = 10) -> list[str]:
+
+
+def get_pixabay_cropped_images(query: str, num_images: int = 5, width: int = 300, height: int = 200) -> list[str]:
+    """
+    Pixabayから画像を検索し、指定サイズにトリミングして、base64形式で返す
+    """
     API_KEY = ""
     query_encoded = quote(query)
     url = (
@@ -107,10 +118,45 @@ def get_pixabay_images(query: str, num_images: int = 10) -> list[str]:
 
         data = res.json()
         hits = data.get("hits", [])
-        return [img["webformatURL"] for img in hits]
+        image_urls = [img["webformatURL"] for img in hits]
+
+        # 取得した画像URLをリサイズしてbase64で返す
+        cropped_images_base64 = []
+        for url in image_urls:
+            img = download_and_crop_image(url, width, height)
+            if img:
+                base64_img = encode_image_to_base64(img)
+                cropped_images_base64.append(base64_img)
+
+        return cropped_images_base64
+
     except Exception as e:
         print("画像取得失敗:", e)
         return []
+
+def download_and_crop_image(url: str, width: int = 300, height: int = 200) -> Image.Image:
+    """
+    URLから画像をダウンロードし、指定サイズにリサイズ（中央トリミング）
+    """
+    try:
+        response = requests.get(url)
+        img = Image.open(BytesIO(response.content)).convert("RGB")
+
+        # アスペクト比無視でサイズ変更（中央クロップしたいなら別ロジックも可能）
+        img = img.resize((width, height), Image.LANCZOS)
+        return img
+    except Exception as e:
+        print("画像処理エラー:", e)
+        return None
+
+def encode_image_to_base64(img: Image.Image) -> str:
+    """
+    Pillow画像をbase64エンコードしてdata URLにする
+    """
+    buffer = BytesIO()
+    img.save(buffer, format="JPEG")
+    encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return f"data:image/jpeg;base64,{encoded}"
 def recommend_shops(user_pos, preferred_category, current_time):
     current_time_obj = datetime.strptime(current_time, "%H:%M").time()
 
