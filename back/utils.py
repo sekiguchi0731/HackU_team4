@@ -85,14 +85,32 @@ def is_open(opening_str, closing_str, current_time):
     else:
         # 例：20:00〜02:00 のような深夜営業に対応
         return current_time >= opening or current_time <= closing
-def get_unsplash_image_url(query="sushi"):
+import random
+from urllib.parse import quote
+def get_pixabay_images(query: str, num_images: int = 10) -> list[str]:
+    API_KEY = ""
+    query_encoded = quote(query)
+    url = (
+        f"https://pixabay.com/api/"
+        f"?key={API_KEY}"
+        f"&q={query_encoded}"
+        f"&image_type=photo"
+        f"&per_page={num_images}"
+        f"&safesearch=true"
+    )
+
     try:
-        url = f"https://source.unsplash.com/300x200/?{query}"
-        response = requests.get(url, allow_redirects=True)
-        return response.url  # 最終的な画像のURL
+        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        if res.status_code != 200:
+            print("Pixabay APIエラー:", res.status_code)
+            return []
+
+        data = res.json()
+        hits = data.get("hits", [])
+        return [img["webformatURL"] for img in hits]
     except Exception as e:
-        print("画像取得エラー:", e)
-        return "https://via.placeholder.com/300x200?text=No+Image"
+        print("画像取得失敗:", e)
+        return []
 def recommend_shops(user_pos, preferred_category, current_time):
     current_time_obj = datetime.strptime(current_time, "%H:%M").time()
 
