@@ -1,0 +1,113 @@
+/* --- 全体背景とフォント --- */
+.container {
+    background: linear-gradient(135deg, #FFF5E1, #FFDAB9); /* 同じグラデ背景 */
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* --- タイトル --- */
+  h2 {
+    color: #FF6B81; /* ピンクで統一 */
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 3px rgba(255, 107, 129, 0.2);
+  }
+  
+  /* --- フォームラッパー --- */
+  form {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  /* --- ラベル --- */
+  .form-label {
+    font-weight: bold;
+    color: #FF6B81;
+  }
+  
+  /* --- 入力系 --- */
+  .form-control,
+  .form-select {
+    padding: 14px;
+    border: 2px solid #FFA24D;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: #FF8C00;
+    box-shadow: 0 0 6px rgba(255, 140, 0, 0.4);
+  }
+  
+  /* --- 登録ボタン --- */
+  .orange-submit-button {
+    background-color: #FF8C00;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+  }
+  
+  .orange-submit-button:hover {
+    background-color: #FFA733;
+    transform: scale(1.03);
+  }
+  
+  .orange-submit-button:active {
+    background-color: #E0E0E0;
+    color: #FF8C00;
+  }
+  
+  /* --- メッセージ --- */
+  .message {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #FF6B81;
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  /* --- 戻るボタン --- */
+  .back-button {
+    background-color: transparent;
+    color: #FF8C00;
+    font-weight: 600;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    align-self: flex-start;
+    transition: color 0.3s ease;
+  }
+  
+  .back-button:hover {
+    color: #FF6B81;
+    text-decoration: underline;
+  }
+  
+  /* タイトルのカスタマイズ */
+  .title {
+    color: #FF8C00;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  

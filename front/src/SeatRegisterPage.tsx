@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "./SeatRegisterPage.css";
 
 type Shop = {
   id: number;
@@ -13,10 +14,9 @@ const SeatRegisterPage: React.FC = () => {
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedShopId, setSelectedShopId] = useState<string>("");
   const [seatName, setSeatName] = useState("");
-  const [capacity, setCapacity] = useState<string>("1"); // ← 文字列に変更
+  const [capacity, setCapacity] = useState<string>("1");
   const [message, setMessage] = useState("");
 
-  // 店主が持っている全店舗を取得
   useEffect(() => {
     const fetchShops = async () => {
       const res = await fetch(
@@ -26,7 +26,7 @@ const SeatRegisterPage: React.FC = () => {
 
       if (res.ok && data.shops && data.shops.length > 0) {
         setShops(data.shops);
-        setSelectedShopId(data.shops[0].id.toString()); // 最初の店舗を初期選択
+        setSelectedShopId(data.shops[0].id.toString());
       } else {
         alert("店舗が見つかりませんでした。");
         navigate(`/owner/${owner_id}/shop_sign_up`);
@@ -53,7 +53,7 @@ const SeatRegisterPage: React.FC = () => {
       },
       body: new URLSearchParams({
         name: seatName,
-        capacity: parsedCapacity.toString(), // ← 数値にしてから送信
+        capacity: parsedCapacity.toString(),
         shop_id: selectedShopId,
       }),
     });
@@ -68,13 +68,10 @@ const SeatRegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="container py-5">
-      <h2 className="text-center mb-4">席の登録</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto"
-        style={{ maxWidth: 600 }}
-      >
+    <div className="container">
+      <h2 className="title">席の登録</h2>
+
+      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 600 }}>
         <div className="mb-3">
           <label className="form-label">店舗を選択</label>
           <select
@@ -108,19 +105,31 @@ const SeatRegisterPage: React.FC = () => {
             type="number"
             className="form-control"
             value={capacity}
-            onChange={(e) => setCapacity(e.target.value)} // ← 入力は自由
+            onChange={(e) => setCapacity(e.target.value)}
             min={1}
             required
           />
         </div>
 
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="orange-submit-button">
             登録
           </button>
         </div>
 
-        {message && <p className="mt-3 text-center">{message}</p>}
+        {message && (
+          <div>
+            <p className="message">{message}</p>
+            {/* 戻るボタンを登録メッセージの下に追加 */}
+            <button
+              className="back-button"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              ← 前のページに戻る
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
