@@ -43,10 +43,8 @@ def recommend():
             "id": index + 1,
             "name": rec["name"],
             "description": (
-                f"カテゴリスコア: {rec['category_score']:.2f}, "
-                f"距離スコア: {rec['distance_score']:.2f}, "
-                f"時間スコア: {rec['time_score']:.2f}, "
-                f"席スコア: {rec['seat_score']:.2f}"
+                f"距離スコア: {rec['distance']:.2f}, "
+                f"空席数: {rec['total_available_capacity']}, "
             ),
             "image": f"https://source.unsplash.com/300x200/?{rec['name'].replace(' ', '%20')}"
         }
