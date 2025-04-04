@@ -11,6 +11,8 @@ from flask import Response
 def load_data():
     with open('restaurants.json', 'r', encoding='utf-8') as f:
         return json.load(f)
+from urllib.parse import quote  # ←これ追加
+import random
 
 @app.route("/recommend", methods=["GET"])
 def recommend():
@@ -35,9 +37,8 @@ def recommend():
     print(f"希望カテゴリ: {preferred_category}")
     print(f"現在時刻: {current_time}")
 
-    # ✅ 修正済み：引数3つで呼ぶ
     recommendations = utils.recommend_shops(user_location, preferred_category, current_time)
-
+    images = utils.get_pixabay_images(preferred_category, num_images=10)
     formatted_recommendations = [
         {
             "id": index + 1,
@@ -46,7 +47,9 @@ def recommend():
                 f"距離スコア: {rec['distance']:.2f}, "
                 f"空席数: {rec['total_available_capacity']}, "
             ),
-            "image": f"https://source.unsplash.com/300x200/?{rec['name'].replace(' ', '%20')}"
+            "image": random.choice(images) if images else "https://via.placeholder.com/300x200?text=No+Image"
+
+            
         }
         for index, rec in enumerate(recommendations)
     ]
@@ -54,6 +57,7 @@ def recommend():
     response = json.dumps({"recommendations": formatted_recommendations}, ensure_ascii=False)
     print(f"レスポンス: {response}")
     return Response(response, content_type="application/json; charset=utf-8")
+
 @app.route('/recomend')
 def recomend_page():
     return render_template('recomend.html')
