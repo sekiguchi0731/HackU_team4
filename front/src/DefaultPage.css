@@ -1,43 +1,45 @@
-/* Google Fonts を適用 */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-/* 背景全体 */
+/* --- 共通設定 --- */
 body {
-  background: linear-gradient(135deg, #FFF5E1, #FFDAB9);
   margin: 0;
   font-family: 'Poppins', sans-serif;
-}
-
-/* コンテナのデザイン */
-.default-page {
+  background: linear-gradient(135deg, #FFF5E1, #FFDAB9);
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center; /* 中央に寄せる */
+}
+
+/* --- メインコンテナ --- */
+.default-page {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100vh;
   text-align: center;
+  padding: 20px;
+  width: 100%; /* 画面いっぱいに広がる */
 }
 
-/* タイトル（Welcome!） */
-.default-page h1 {
-  color: #FF8C00;
-  font-size: 3rem;
-  margin-bottom: 0.3rem;
-  text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
+/* --- Nijimatch タイトル（1文字ずつアニメ） --- */
+.nijimatch {
+  margin-top: 40px;
+  margin-bottom: 1.5rem;
 }
 
-/* Nijimatch の文字アニメーション */
 .nijimatch span {
   color: #FF6B81;
-  font-size: 2rem;
+  font-size: 8rem;  /* フォントサイズを大きく */
   text-shadow: 2px 2px 4px rgba(255, 107, 129, 0.3);
-  opacity: 0; /* 最初は透明 */
-  transform: translateY(10px); /* ちょっと下から浮かせる */
+  opacity: 0;
+  transform: translateY(10px);
   display: inline-block;
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
-/* 1文字ずつ浮かび上がるアニメーション */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -49,52 +51,95 @@ body {
   }
 }
 
-/* ローディングメッセージ */
-.default-page p {
-  color: #555;
-  font-size: 1.2rem;
-  font-weight: bold;
-  position: relative;
-  animation: fadeInOut 1.5s infinite;
-}
-
-/* 点滅アニメーション */
-@keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+.header-logo {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 2rem; /* ボタンとの間隔 */
 }
 
 .button-group {
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  justify-content: center;
+  gap: 24px;  /* ボタン間の間隔を広げる */
+  margin-top: 10px;
 }
 
 .button-group button {
-  padding: 12px 24px;
-  font-size: 16px;
-  background-color: #ffffff;
+  padding: 22px 60px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+  background-color: #FFA24D;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+  min-width: 220px;
+  width: 32%;
+  max-width: 420px;
 }
 
-.button-group button:hover {
-  background-color: #ffb163;
+
+/* --- レスポンシブ対応 --- */
+
+/* タブレット以上の大きさ */
+@media (max-width: 1024px) {
+  .default-page h1 {
+    font-size: 6rem;  /* タブレットに合わせた大きさ */
+  }
+
+  .logo-image {
+    height: 200px;  /* ロゴ画像の高さを調整 */
+  }
+
+  .nijimatch span {
+    font-size: 6rem;  /* タイトルのフォントサイズ調整 */
+  }
+
+  .button-group button {
+    padding: 16px 32px;
+    font-size: 1.2rem;
+  }
 }
 
-.header-logo {
-  text-align: center;
-  margin-bottom: 2rem;
+/* タブレット以下（スマホ・小型デバイス） */
+@media (max-width: 768px) {
+  .default-page h1 {
+    font-size: 5rem;  /* フォントサイズを調整 */
+  }
+
+  .logo-image {
+    height: 180px;  /* ロゴ画像の高さを調整 */
+  }
+
+  .nijimatch span {
+    font-size: 5rem;  /* タイトルのフォントサイズ調整 */
+  }
+
+  .button-group button {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+  }
 }
 
-.logo-image {
-  height: 120px;         /* ← 高さを大きく！ */
-  max-width: 90%;        /* ← 横幅の制限（画面に収まるように） */
-  object-fit: contain;
-}
+/* 超小型デバイス（スマホ縦向き） */
+@media (max-width: 480px) {
+  .default-page h1 {
+    font-size: 3rem;  /* フォントサイズを調整 */
+  }
 
+  .logo-image {
+    height: 150px;  /* ロゴ画像の高さを調整 */
+  }
+
+  .nijimatch span {
+    font-size: 4rem;  /* タイトルのフォントサイズ調整 */
+  }
+
+  .button-group button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
