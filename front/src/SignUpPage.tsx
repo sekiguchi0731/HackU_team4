@@ -80,7 +80,7 @@ const SignUpPage: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">お店かお客か選んでください</label>
+          <label className="form-label">アカウントの種類を選んでください</label>
           <select
             className="form-select"
             name="role"
@@ -96,7 +96,7 @@ const SignUpPage: React.FC = () => {
           </select>
         </div>
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn-sign-up">
             登録
           </button>
         </div>
