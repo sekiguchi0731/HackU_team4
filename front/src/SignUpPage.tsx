@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./SingUpPage.css";
 
 const SignUpPage: React.FC = () => {
   const [form, setForm] = useState({
@@ -44,7 +44,7 @@ const SignUpPage: React.FC = () => {
 
   return (
     <div className="container py-5">
-      <h2 className="text-center mb-4">新規ユーザー登録（React）</h2>
+      <h2 className="text-center mb-4 signup-title">ユーザ登録をするよ！</h2>
       <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 600 }}>
         <div className="mb-3">
           <label className="form-label">名前</label>
@@ -80,7 +80,7 @@ const SignUpPage: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">役割</label>
+          <label className="form-label">お見せかな？お客かな？</label>
           <select
             className="form-select"
             name="role"
@@ -89,7 +89,7 @@ const SignUpPage: React.FC = () => {
             required
           >
             <option value="" disabled>
-              役割を選択
+              どちらか選んでね
             </option>
             <option value="お客">お客</option>
             <option value="店主">店主</option>

@@ -1,9 +1,12 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 /* コンテナのスタイル */
 .container {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background: white; /* 背景を白に統一 */
+  background: #fffbf3; /* 淡いベージュ */
   text-align: center;
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
@@ -17,7 +20,7 @@
   margin-bottom: 20px;
 }
 
-/* 検索バーのスタイル */
+/* 検索バー */
 .search-bar {
   padding: 10px;
   font-size: 16px;
@@ -38,7 +41,7 @@
 .search-button {
   padding: 10px 15px;
   background-color: #FF8C00; /* オレンジ */
-  color: black; /* 文字を黒に変更 */
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -54,7 +57,7 @@
 
 .search-button:active {
   background-color: #E0E0E0; /* 押したら薄いグレー */
-  color: #FF8C00; /* 文字をオレンジに変更 */
+  color: #FF8C00;
 }
 
 /* カテゴリーボタンのスタイル */
@@ -71,7 +74,7 @@
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   background-color: white;
-  color: gray; /* 文字をグレーに変更 */
+  color: gray;
   font-weight: bold;
   text-align: center;
 }
@@ -87,4 +90,13 @@
 .category-button.selected {
   background-color: #FF8C00;
   color: white;
+}
+
+/* 条件を教えてね のタイトル */
+.search-title {
+  font-size: 20px; /* 文字を調整 */
+  font-weight: bold;
+  color:#Ff618B ; /* ピンクでかわいく */
+  text-align: center;
+  margin-bottom: 10px;
 }

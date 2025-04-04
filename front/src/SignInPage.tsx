@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./SignInPage.css";
 
 const SignInPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -55,17 +56,19 @@ const SignInPage: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">
-          ログイン
-        </button>
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => navigate("/")}
-          >
-            前の画面に戻るよ
+        <div className="btn-group">
+          <button type="submit" className="btn-sign-in">
+            ログイン
           </button>
+          <div className="text-center">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate("/")}
+            >
+              前の画面に戻る
+            </button>
+          </div>
         </div>
       </form>
     </div>

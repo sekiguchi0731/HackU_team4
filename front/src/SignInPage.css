@@ -1,0 +1,120 @@
+/* Google Fonts を適用 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* 背景全体 */
+/* 背景全体 */
+body {
+    background-color: #fffbf3; /* 背景を#fffbf3に変更 */
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+/* コンテナのデザイン */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* フォームのデザイン */
+form {
+  background: rgba(255, 218, 185, 0.9);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+/* ログイン画面のタイトルをオレンジ色に */
+h1 {
+  color: #FF8C00;  /* オレンジ色 */
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
+}
+
+/* ラベルのデザイン */
+.form-label {
+  font-weight: bold;
+  color: #FF6B81;
+  font-size: 1.2rem;
+}
+
+/* 入力フィールド */
+.form-control {
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  font-size: 1rem;
+  gap: 0px;
+}
+
+/* ログインボタンのデザイン */
+.btn-sign-in {
+    background-color: #FF8C00 !important; /* オレンジに強制 */
+    border: none;
+    border-radius: 7px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #ffb163 !important; /* ホバー時の色（薄いオレンジ） */
+    transform: translateY(-4px);
+  }
+  
+  .btn-primary:active {
+    background-color: #e77c00 !important; /* クリック時の色（少し暗めのオレンジ） */
+    transform: translateY(2px);
+  }
+  
+/* 前の画面に戻るボタンのデザイン */
+.btn-secondary {
+  border-radius: 7px;  /* 丸みを強調 */
+  width: 100%;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  color: #FF8C00;
+}
+
+.btn-secondary:hover {
+  background-color: #ffb163;
+  transform: translateY(-4px);  /* ホバー時にボタンが少し浮き上がる */
+}
+
+.btn-secondary:active {
+  background-color: #e77c00;
+  transform: translateY(2px);  /* クリック時のエフェクト */
+}
+
+.text-center {
+  margin-top: 1rem;
+}
+
+/* フォームの入力フィールドのデザイン */
+input.form-control {
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ログイン画面のタイトルをオレンジに */
+h1 {
+    color: #FF8C00; /* オレンジ色 */
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(255, 140, 0, 0.3);
+  }
+  

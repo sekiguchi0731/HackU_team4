@@ -1,0 +1,6 @@
+/* ユーザ登録のタイトルをオレンジにする */
+.text-center {
+    color: #FF8C00; /* オレンジ */
+    font-weight: bold; /* 文字を少し強調 */
+  }
+  
