@@ -13,7 +13,7 @@ const SeatRegisterPage: React.FC = () => {
   const [shops, setShops] = useState<Shop[]>([]);
   const [selectedShopId, setSelectedShopId] = useState<string>("");
   const [seatName, setSeatName] = useState("");
-  const [capacity, setCapacity] = useState<number>(1);
+  const [capacity, setCapacity] = useState<string>("1"); // ← 文字列に変更
   const [message, setMessage] = useState("");
 
   // 店主が持っている全店舗を取得
@@ -39,6 +39,13 @@ const SeatRegisterPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const parsedCapacity = parseInt(capacity, 10);
+
+    if (isNaN(parsedCapacity) || parsedCapacity < 1) {
+      setMessage("収容人数は1以上の数字を入力してください。");
+      return;
+    }
+
     const res = await fetch("http://localhost:5050/seats_register", {
       method: "POST",
       headers: {
@@ -46,7 +53,7 @@ const SeatRegisterPage: React.FC = () => {
       },
       body: new URLSearchParams({
         name: seatName,
-        capacity: capacity.toString(),
+        capacity: parsedCapacity.toString(), // ← 数値にしてから送信
         shop_id: selectedShopId,
       }),
     });
@@ -54,7 +61,7 @@ const SeatRegisterPage: React.FC = () => {
     if (res.ok) {
       setMessage("席を登録しました！");
       setSeatName("");
-      setCapacity(1);
+      setCapacity("1");
     } else {
       setMessage("登録に失敗しました。");
     }
@@ -101,7 +108,7 @@ const SeatRegisterPage: React.FC = () => {
             type="number"
             className="form-control"
             value={capacity}
-            onChange={(e) => setCapacity(Number(e.target.value))}
+            onChange={(e) => setCapacity(e.target.value)} // ← 入力は自由
             min={1}
             required
           />
