@@ -35,7 +35,7 @@ const ShopSignUpPage: React.FC = () => {
     });
 
     if (res.ok) {
-      navigate(`/owner/${owner_id}/seats`);
+      navigate(`/owner/${owner_id}/`);
     } else {
       alert("店舗登録に失敗しました");
     }
