@@ -49,7 +49,7 @@ const OwnerDashboard: React.FC = () => {
                 住所: {shop.address}
               </div>
               <button
-                className="btn-add-shop"
+                className="btn-add-seat"
                 onClick={() =>
                   navigate(`/owner/${owner_id}/seats?shop_id=${shop.id}`)
                 }
