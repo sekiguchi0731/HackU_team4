@@ -26,13 +26,35 @@ const GenresPage: React.FC = () => {
   // カテゴリクリック時にrecommendエンドポイントにリクエストを送信
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    navigate("/match"); // ← 遷移！
+  
+    // 固定時刻を設定
+    const fixedTime = "15:00";
+  
+    // recommendエンドポイントにリクエストを送信
+    fetch(
+      `http://localhost:5050/recommend?user_lat=35.6895&user_lng=139.6917&preferred_category=${categoryName}&current_time=${fixedTime}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((res) => {
+        console.log("レスポンスステータス:", res.status);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("推薦結果:", data);
+        // 推薦結果を次のページに渡す（例: /match ページに遷移）
+        navigate("/match", { state: { recommendations: data.recommendations } });
+      })
+      .catch((err) => {
+        console.error("推薦エラー:", err);
+      });
   };
 
   return (
     <div className="container">
     
-      <h2 className="search-title">どんなお見せを探してるかな？</h2>
+      <h2 className="search-title">お店の条件を入力</h2>
 
       <div className="search-container">
         <input
