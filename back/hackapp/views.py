@@ -38,7 +38,7 @@ def recommend():
     print(f"現在時刻: {current_time}")
 
     recommendations = utils.recommend_shops(user_location, preferred_category, current_time)
-    images = utils.get_pixabay_images(preferred_category, num_images=10)
+    images = utils.get_pixabay_cropped_images(preferred_category, num_images=10,width=300,height=200)
     formatted_recommendations = [
         {
             "id": index + 1,
