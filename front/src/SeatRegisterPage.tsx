@@ -1,43 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState} from "react";
+import { useSearchParams } from "react-router-dom";
 
-type Shop = {
-  id: number;
-  name: string;
-};
+// type Shop = {
+//   id: number;
+//   name: string;
+// };
 
 const SeatRegisterPage: React.FC = () => {
-  const { owner_id } = useParams();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const shopId = searchParams.get("shop_id");
 
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [selectedShopId, setSelectedShopId] = useState<string>("");
+  // const [shops, setShops] = useState<Shop[]>([]);
+  // const [selectedShopId, setSelectedShopId] = useState<string>("");
   const [seatName, setSeatName] = useState("");
   const [capacity, setCapacity] = useState<string>("1"); // ← 文字列に変更
   const [message, setMessage] = useState("");
 
-  // 店主が持っている全店舗を取得
-  useEffect(() => {
-    const fetchShops = async () => {
-      const res = await fetch(
-        `http://localhost:5050/shops_by_owner/${owner_id}`
-      );
-      const data = await res.json();
-
-      if (res.ok && data.shops && data.shops.length > 0) {
-        setShops(data.shops);
-        setSelectedShopId(data.shops[0].id.toString()); // 最初の店舗を初期選択
-      } else {
-        alert("店舗が見つかりませんでした。");
-        navigate(`/owner/${owner_id}/shop_sign_up`);
-      }
-    };
-
-    fetchShops();
-  }, [owner_id, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!shopId) {
+      setMessage("shop_idがURLに見つかりません");
+      return;
+    }
 
     const parsedCapacity = parseInt(capacity, 10);
 
@@ -54,7 +40,7 @@ const SeatRegisterPage: React.FC = () => {
       body: new URLSearchParams({
         name: seatName,
         capacity: parsedCapacity.toString(), // ← 数値にしてから送信
-        shop_id: selectedShopId,
+        shop_id: shopId,
       }),
     });
 
@@ -75,7 +61,7 @@ const SeatRegisterPage: React.FC = () => {
         className="mx-auto"
         style={{ maxWidth: 600 }}
       >
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label className="form-label">店舗を選択</label>
           <select
             className="form-select"
@@ -89,7 +75,7 @@ const SeatRegisterPage: React.FC = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className="mb-3">
           <label className="form-label">席の名前</label>
