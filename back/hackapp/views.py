@@ -42,6 +42,7 @@ def recommend():
     formatted_recommendations = [
         {
             "id": index + 1,
+            "shop_id": rec["shop_id"],
             "name": rec["name"],
             "description": (
                 f"距離スコア: {rec['distance']:.2f}, "
@@ -368,6 +369,25 @@ def result():
     return render_template('results.html', results=results, genre=genre)
 
 
+@app.route("/reserve_data", methods=["GET"])
+def reserve_data() -> tuple[Response, Literal[400]] | tuple[Response, Literal[404]] | Response:
+    shop_id = request.args.get("shop_id", type=int)
+    if not shop_id:
+        return jsonify({"error": "shop_id が必要です"}), 400
+
+    shop = Shop.query.get(shop_id)
+    if not shop:
+        return jsonify({"error": "該当する店舗が見つかりません"}), 404
+
+    seats = Seat.query.filter_by(shop_id=shop.id, is_active=True).all()
+
+    seat_data = [
+        {"id": seat.id, "name": seat.name, "capacity": seat.capacity} for seat in seats
+    ]
+
+    return jsonify({"shop_name": shop.name, "seats": seat_data})
+
+
 @app.route('/reserve', methods=['GET', 'POST'])
 def reserve_page():
     if request.method == 'GET':
@@ -399,7 +419,7 @@ def reserve_page():
         if seat and seat.is_active:
             seat.is_active = False
             #testのためいちいちfalseにするとめんどくさいのでのちにコメントアウト#
-            seat.is_active = True
+            # seat.is_active = True
 
             db.session.commit()
             return render_template("reserve_success.html", shop_name=shop_name, seat=seat)

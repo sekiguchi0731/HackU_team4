@@ -9,6 +9,7 @@ import SignUpPage from "./SignUpPage";
 import OwnerDashboard from "./OwnerDashboard";
 import ShopSignUpPage from "./ShopSignUpPage";
 import SeatRegisterPage from "./SeatRegisterPage";
+import ReservePage from "./ReservePage";
 
 const App: React.FC = () => {
   return (
@@ -21,7 +22,8 @@ const App: React.FC = () => {
         <Route path="/match" element={<MatchingPage />} />
         <Route path="/owner/:owner_id" element={<OwnerDashboard />} />
         <Route path="/owner/:owner_id/shop_sign_up" element={<ShopSignUpPage />} />
-        <Route path="/owner/:owner_id/seats" element={<SeatRegisterPage />} />        <Route path="/reserve" element={<div>予約ページへようこそ！</div>} />
+        <Route path="/owner/:owner_id/seats" element={<SeatRegisterPage />} />
+        <Route path="/reserve" element={<ReservePage />} />
       </Routes>
     </BrowserRouter>
   );
