@@ -3,7 +3,7 @@ import urllib
 import re
 from geopy.distance import geodesic
 from datetime import datetime  # datetimeをインポート
-from sqlalchemy import and_  # SQLAlchemyのand_をインポート
+from sqlalchemy import and_, exists, select, func
 from hackapp import app,db
 # データベースモデルのインポート
 from hackapp.models.restaurants import User,Shop,Seat
@@ -69,64 +69,56 @@ def make_dis(pos1, pos2):
         return None
 
 
-def recommend_shops(user_pos, preferred_category, current_time): 
-    """
-    user_pos: (lat, lng) タプルまたは 住所文字列
-    """
+from datetime import datetime
+from sqlalchemy import and_, exists
+
+def recommend_shops(user_pos, preferred_category, current_time):
     current_time = datetime.strptime(current_time, "%H:%M").time()
+    current_time_str = current_time.strftime("%H:%M")
+
     print("debug: current_time:", current_time)
     print("debug: user_pos:", user_pos)
 
-    shops = db.session.query(Shop).all()
+    # ShopとSeatをJOINして、空席数(capacity合計)をGROUP BYで計算
+    results = db.session.query(
+        Shop.id,
+        Shop.name,
+        Shop.address,
+        func.sum(Seat.capacity).label("total_available_capacity")
+    ).join(Seat, Shop.id == Seat.shop_id
+    ).filter(
+        and_(
+            Shop.category == preferred_category,
+            Shop.opening_time <= current_time_str,
+            Shop.closing_time >= current_time_str,
+            Seat.is_active == True,
+            Seat.capacity > 0
+        )
+    ).group_by(Shop.id).all()
+
+    print("debug: filtered_shops with capacity sum:", results)
+
     recommendations = []
 
-    for shop in shops:
-        if not shop.address:
-            print(f"Shop {shop.name} is missing an address.")
+    for shop_id, name, address, total_capacity in results:
+        if not address:
+            print(f"Shop {name} is missing an address.")
             continue
 
-        # user_posは(緯度, 経度)タプルでも、文字列でもmake_disが処理してくれる
-        shop_distance = make_dis(user_pos, shop.address)
-
+        shop_distance = make_dis(user_pos, address)
         if shop_distance is None:
-            print(f"Could not calculate distance for shop {shop.name}.")
+            print(f"Could not calculate distance for shop {name}.")
             continue
 
-        distance_score = max(0, 1 - shop_distance / 10)
+        recommendations.append({
+            "shop_id": shop_id,
+            "name": name,
+            "distance": shop_distance,
+            "total_available_capacity": total_capacity
+        })
 
-        category_score = 1.0 if hasattr(shop, 'category') and shop.category == preferred_category else 0.0
-
-        try:
-            opening_time = datetime.strptime(shop.opening_time, "%H:%M").time()
-            closing_time = datetime.strptime(shop.closing_time, "%H:%M").time()
-            time_score = 1.0 if opening_time <= current_time <= closing_time else 0.0
-        except ValueError:
-            print(f"Invalid time format for shop {shop.name}.")
-            time_score = 0.0
-
-        seats = db.session.query(Seat).filter(
-            and_(Seat.shop_id == shop.id, Seat.is_active == True)
-        ).all()
-        seat_score = 1.0 if any(seat.capacity > 0 for seat in seats) else 0.0
-
-        total_score = (
-            0.4 * distance_score +
-            0.3 * category_score +
-            0.2 * time_score +
-            0.1 * seat_score
-        )
-
-        if total_score > 0:
-            recommendations.append({
-                "name": shop.name,
-                "total_score": total_score,
-                "category_score": category_score,
-                "distance_score": distance_score,
-                "time_score": time_score,
-                "seat_score": seat_score
-            })
-
-    recommendations.sort(key=lambda x: x["total_score"], reverse=True)
+    recommendations.sort(key=lambda x: x["distance"])
+    print("debug: recommendations:", recommendations)
     return recommendations
 
 pos1='石川県金沢市もりの里1丁目45-1'
