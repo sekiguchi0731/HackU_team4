@@ -37,7 +37,9 @@ const SignInPage: React.FC = () => {
       <h1 className="mb-4 text-center">ログイン画面</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
+
           <label className="form-label">登録メールアドレスを入力</label>
+
           <input
             type="email"
             className="form-control"
@@ -47,7 +49,9 @@ const SignInPage: React.FC = () => {
           />
         </div>
         <div className="mb-3">
+
           <label className="form-label">パスワードを入力</label>
+
           <input
             type="password"
             className="form-control"
@@ -56,17 +60,19 @@ const SignInPage: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">
-          ログイン
-        </button>
-        <div className="text-center mt-4">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => navigate("/")}
-          >
-            前の画面に戻るよ
+        <div className="btn-group">
+          <button type="submit" className="btn-sign-in">
+            ログイン
           </button>
+          <div className="text-center">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate("/")}
+            >
+              前の画面に戻る
+            </button>
+          </div>
         </div>
       </form>
     </div>

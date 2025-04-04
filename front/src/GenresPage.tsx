@@ -56,6 +56,7 @@ const GenresPage: React.FC = () => {
     
       <h2 className="search-title">お店の条件を入力</h2>
 
+
       <div className="search-container">
         <input
           type="text"
