@@ -86,3 +86,15 @@ body {
 .button-group button:hover {
   background-color: #ffb163;
 }
+
+.header-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo-image {
+  height: 120px;         /* ← 高さを大きく！ */
+  max-width: 90%;        /* ← 横幅の制限（画面に収まるように） */
+  object-fit: contain;
+}
+
