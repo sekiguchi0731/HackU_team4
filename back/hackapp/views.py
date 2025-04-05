@@ -44,9 +44,12 @@ def recommend():
             "id": index + 1,
             "shop_id": rec["shop_id"],
             "name": rec["name"],
+            "address": rec["address"],
             "description": (
-                f"距離スコア: {rec['distance']:.2f}, "
-                f"空席数: {rec['total_available_capacity']}, "
+                f"{rec['distance']:.2f}km先,\n"
+                f"住所: {rec['address']},\n"
+                f"営業時間: {rec['opening_time']} - {rec['closing_time']},\n"
+                f"空席数: {rec['total_available_capacity']},"
             ),
             "image": random.choice(images) if images else "https://via.placeholder.com/300x200?text=No+Image"
 

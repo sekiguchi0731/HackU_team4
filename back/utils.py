@@ -25,14 +25,10 @@ from sqlalchemy import and_, exists
 def make_dis(pos1, pos2): 
     makeUrl = "https://msearch.gsi.go.jp/address-search/AddressSearch?q="
 
-    # 座標取得ヘルパー
     def get_coordinates(pos):
-        # posがタプル（緯度・経度）ならそのまま返す
         if isinstance(pos, (tuple, list)) and len(pos) == 2:
             lat, lng = pos
-            return lng, lat  # 緯度経度 → 経度緯度に変換
-
-        # posが文字列（住所）の場合はジオコーディング
+            return lng, lat
         s_quote = urllib.parse.quote(pos)
         response = requests.get(makeUrl + s_quote)
         try:
@@ -40,11 +36,9 @@ def make_dis(pos1, pos2):
         except ValueError:
             print(f"レスポンスをJSONとしてパースできませんでした: {pos}")
             return None
-        
         if not data:
             print(f"APIからデータが返ってきませんでした: {pos}")
             return None
-        
         try:
             longitude, latitude = data[0]["geometry"]["coordinates"]
             return longitude, latitude
@@ -52,28 +46,27 @@ def make_dis(pos1, pos2):
             print(f"座標取得中にエラーが発生しました ({pos}): {e}")
             return None
 
-    # 座標取得
     coord1 = get_coordinates(pos1)
     coord2 = get_coordinates(pos2)
 
     if coord1 is None or coord2 is None:
         return None
 
-    # 座標（経度緯度）→ geodesic の引数（緯度, 経度）形式に変換
     lon1, lat1 = coord1
     lon2, lat2 = coord2
-    print("user_pos:", coord1)
-    # 距離計算
-    distance = geodesic((lat1, lon1), (lat2, lon2))
 
-    # 数値だけ抽出して四捨五入（小数1桁）
-    match = re.search(r"[+-]?(?:\d+\.\d*|\.\d+|\d+\.)", str(distance))
-    if match:
-        num = round(float(match.group()), 1)
-        return num
-    else:
-        print("距離の数値を抽出できませんでした。")
-        return None
+    # 距離計算（km単位）
+    distance_km = geodesic((lat1, lon1), (lat2, lon2)).km
+    rounded_distance = round(distance_km, 1)
+
+    # 徒歩時間（分）＝ 距離[km] ÷ 4.8[km/h] × 60[min]
+    walk_time_min = round((distance_km / 4.8) * 60)
+
+    return {
+        "distance_km": rounded_distance,
+        "walk_minutes": walk_time_min
+    }
+
 
 
 
@@ -99,7 +92,7 @@ def get_pixabay_cropped_images(query: str, num_images: int = 5, width: int = 300
     """
     Pixabayから画像を検索し、指定サイズにトリミングして、base64形式で返す
     """
-    API_KEY = ""
+    API_KEY = "49651736-8789044e12cc0944b118087dd"
     query_encoded = quote(query)
     url = (
         f"https://pixabay.com/api/"
@@ -160,7 +153,6 @@ def encode_image_to_base64(img: Image.Image) -> str:
 def recommend_shops(user_pos, preferred_category, current_time):
     current_time_obj = datetime.strptime(current_time, "%H:%M").time()
 
-    # カテゴリ + 空席あり のショップをSQLで絞り込む（営業時間はここでは見ない）
     results = db.session.query(
         Shop.id,
         Shop.name,
@@ -177,7 +169,7 @@ def recommend_shops(user_pos, preferred_category, current_time):
             Seat.capacity > 0
         )
     ).group_by(Shop.id).all()
-    print(results)
+
     recommendations = []
 
     for shop_id, name, address, opening_time, closing_time, category, total_capacity in results:
@@ -186,19 +178,22 @@ def recommend_shops(user_pos, preferred_category, current_time):
         if not is_open(opening_time, closing_time, current_time_obj):
             continue
 
-        shop_distance = make_dis(user_pos, address)
-        if shop_distance is None:
+        shop_distance_info = make_dis(user_pos, address)
+        if shop_distance_info is None:
             continue
 
         recommendations.append({
             "shop_id": shop_id,
             "name": name,
-            "distance": shop_distance,
+            "address": address,
+            "distance": shop_distance_info["distance_km"],
+            "walk_minutes": shop_distance_info["walk_minutes"],
             "total_available_capacity": total_capacity,
-            "category": category  # あとで画像生成にも使える
+            "category": category,
+            "opening_time": opening_time,
+            "closing_time": closing_time
         })
 
-    # 距離が近い順に並べる
     recommendations.sort(key=lambda x: x["distance"])
     return recommendations
 pos1='石川県金沢市もりの里1丁目45-1'
