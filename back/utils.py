@@ -99,7 +99,7 @@ def get_pixabay_cropped_images(query: str, num_images: int = 5, width: int = 300
     """
     Pixabayから画像を検索し、指定サイズにトリミングして、base64形式で返す
     """
-    API_KEY = ""
+    API_KEY = "49651736-8789044e12cc0944b118087dd"
     query_encoded = quote(query)
     url = (
         f"https://pixabay.com/api/"

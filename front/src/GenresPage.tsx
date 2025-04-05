@@ -7,11 +7,12 @@ const GenresPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [categories, setCategories] = useState<{ name: string }[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5050/genres")
+    fetch(`${apiUrl}/genres`)
       .then((res) => res.json())
       .then((data: string[]) => {
         const formatted = data.map((name) => ({ name }));

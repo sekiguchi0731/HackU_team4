@@ -14,4 +14,8 @@ import hackapp.views
 # CORSは最後に書く
 from flask_cors import CORS
 
-CORS(app, origins="http://localhost:5173", supports_credentials=True)
+CORS(
+    app,
+    origins=["http://localhost:5173", "https://0f61-27-230-37-46.ngrok-free.app"],
+    supports_credentials=True,
+)

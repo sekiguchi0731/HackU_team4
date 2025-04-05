@@ -14,6 +14,25 @@ def load_data():
 from urllib.parse import quote  # ←これ追加
 import random
 
+from flask import send_from_directory
+from hackapp import app  # appオブジェクトをインポート
+
+import os
+
+# React のビルドフォルダへのパス
+REACT_BUILD_DIR = os.path.join(os.path.dirname(__file__), "../../front/dist")
+
+
+@app.route("/")
+def serve_react_index():
+    return send_from_directory(REACT_BUILD_DIR, "index.html")
+
+
+@app.route("/<path:path>")
+def serve_react_static(path):
+    return send_from_directory(REACT_BUILD_DIR, path)
+
+
 @app.route("/recommend", methods=["GET"])
 def recommend():
     user_lat = request.args.get("user_lat", type=float)
@@ -425,3 +444,11 @@ def reserve_page():
             return render_template("reserve_success.html", shop_name=shop_name, seat=seat)
         else:
             return render_template("reserve.html", shop_name=shop_name, seats=[], error="選択された席が見つからないか、既に予約されています。")
+        
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    if path != "" and os.path.exists(os.path.join(REACT_BUILD_DIR, path)):
+        return send_from_directory(REACT_BUILD_DIR, path)
+    else:
+        return send_from_directory(REACT_BUILD_DIR, "index.html")
