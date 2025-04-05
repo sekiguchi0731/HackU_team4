@@ -33,35 +33,32 @@ const GenresPage: React.FC = () => {
       return;
     }
     setSelectedCategory(categoryName);
-  
+
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const currentTime = `${hours}:${minutes}`;
-  
+
     try {
       const encodedAddress = encodeURIComponent(search);
       const response = await fetch(
         `http://localhost:5050/recommend?user_pos=${encodedAddress}&preferred_category=${categoryName}&current_time=${currentTime}`
       );
-  
+
       console.log("レスポンスステータス:", response.status);
       const data = await response.json();
-  
+
       console.log("推薦結果:", data);
       navigate("/match", { state: { recommendations: data.recommendations } });
-  
+
     } catch (err) {
       console.error("推薦リクエストエラー:", err);
     }
   };
 
-
   return (
     <div className="container">
-    
       <h2 className="search-title">お店の条件を入力</h2>
-
 
       <div className="search-container">
         <input
@@ -70,14 +67,8 @@ const GenresPage: React.FC = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="場所を検索..."
-          className="search-bar"
+          className="search-bar w-100"
         />
-        <button
-          className="search-button"
-          // onClick={handleSearchClick}
-        >
-          検索
-        </button>
       </div>
 
       <div className="category-grid">
@@ -93,6 +84,13 @@ const GenresPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      <button
+        className="btn-back"
+        onClick={() => navigate(-1)}
+      >
+        ← 前のページに戻る
+      </button>
     </div>
   );
 };

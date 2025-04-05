@@ -1,5 +1,6 @@
 import React, { useState} from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./SeatRegisterPage.css";
 
 // type Shop = {
 //   id: number;
@@ -10,10 +11,12 @@ const SeatRegisterPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const shopId = searchParams.get("shop_id");
 
+  const navigate = useNavigate();
+  
   // const [shops, setShops] = useState<Shop[]>([]);
   // const [selectedShopId, setSelectedShopId] = useState<string>("");
   const [seatName, setSeatName] = useState("");
-  const [capacity, setCapacity] = useState<string>("1"); // ← 文字列に変更
+  const [capacity, setCapacity] = useState<string>("1");
   const [message, setMessage] = useState("");
 
 
@@ -54,14 +57,11 @@ const SeatRegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="container py-5">
-      <h2 className="text-center mb-4">席の登録</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto"
-        style={{ maxWidth: 600 }}
-      >
-        {/* <div className="mb-3">
+    <div className="container">
+      <h2 className="title">席の登録</h2>
+
+      <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: 600 }}>
+         {/* <div className="mb-3">
           <label className="form-label">店舗を選択</label>
           <select
             className="form-select"
@@ -94,19 +94,31 @@ const SeatRegisterPage: React.FC = () => {
             type="number"
             className="form-control"
             value={capacity}
-            onChange={(e) => setCapacity(e.target.value)} // ← 入力は自由
+            onChange={(e) => setCapacity(e.target.value)}
             min={1}
             required
           />
         </div>
 
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="orange-submit-button">
             登録
           </button>
         </div>
 
-        {message && <p className="mt-3 text-center">{message}</p>}
+        {message && (
+          <div>
+            <p className="message">{message}</p>
+            {/* 戻るボタンを登録メッセージの下に追加 */}
+            <button
+              className="back-button"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              ← 前のページに戻る
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

@@ -34,11 +34,11 @@ const SignUpPage: React.FC = () => {
       setMessage("登録が完了しました！");
       setForm({ name: "", email: "", password: "", role: "" });
       setTimeout(() => {
-        navigate("/sign_in"); // サインインページに遷移
+        navigate("/sign_in");
       }, 1000);
     } else {
       setMessage(data.message || "登録に失敗しました。");
-      console.error("登録エラー：", data)
+      console.error("登録エラー：", data);
     }
   };
 
@@ -95,14 +95,26 @@ const SignUpPage: React.FC = () => {
             <option value="店主">店主</option>
           </select>
         </div>
+
         <div className="d-grid">
           <button type="submit" className="btn-sign-up">
             登録
           </button>
         </div>
-        {/* 登録完了メッセージ */}
+
         {message && <p className="mt-3 text-center">{message}</p>}
       </form>
+
+      {/* 🚀 フォームの外に「前に戻る」ボタン */}
+      <div className="d-grid mt-4" style={{ maxWidth: 600, margin: "0 auto" }}>
+        <button
+          type="button"
+          className="btn-back"
+          onClick={() => navigate(-1)}
+        >
+          前に戻る
+        </button>
+      </div>
     </div>
   );
 };

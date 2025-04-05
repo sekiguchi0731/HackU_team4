@@ -6,7 +6,7 @@ type Item = {
   id: number;
   shop_id: number;
   name: string;
-  description: string;
+  description: string; // 改行コードを含む文字列
   image: string;
 };
 
@@ -47,7 +47,8 @@ const MatchingPage: React.FC = () => {
               className="card-image"
             />
             <h2>{currentItem.name}</h2>
-            <p>{currentItem.description}</p>
+            {/* 改行コードを反映するため whiteSpace: "pre-wrap" を指定 */}
+            <p style={{ whiteSpace: "pre-wrap" }}>{currentItem.description}</p>
             <div className="button-container">
               <button
                 className="nope-button"
