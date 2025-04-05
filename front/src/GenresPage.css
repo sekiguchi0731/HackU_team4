@@ -12,19 +12,35 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* 検索タイトル */
+.search-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #FF618B;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 /* 検索エリア */
 .search-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  display: flex;              /* 横並びにする */
+  gap: 10px;                  /* 検索バーとボタンの間 */
   margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;            /* モバイルで折り返し */
+  width: 100%;
+  max-width: 600px;           /* 最大幅制限 */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 検索バー */
 .search-bar {
   padding: 10px;
   font-size: 16px;
-  width: 60%;
+  flex: 1;                    /* 残りスペースを使う */
+  min-width: 0;
   border: 2px solid #FF8C00;
   border-radius: 5px;
   color: black;
@@ -40,7 +56,7 @@
 /* 検索ボタン */
 .search-button {
   padding: 10px 15px;
-  background-color: #FF8C00; /* オレンジ */
+  background-color: #FF8C00;
   color: white;
   border: none;
   border-radius: 5px;
@@ -48,15 +64,16 @@
   font-size: 16px;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.2s;
+  white-space: nowrap;
 }
 
 .search-button:hover {
-  background-color: #FFA733; /* 少し明るいオレンジ */
+  background-color: #FFA733;
   transform: scale(1.05);
 }
 
 .search-button:active {
-  background-color: #E0E0E0; /* 押したら薄いグレー */
+  background-color: #E0E0E0;
   color: #FF8C00;
 }
 
@@ -68,7 +85,7 @@
 }
 
 .category-button {
-  padding: 12px;
+  padding: 6px;
   border: 2px solid #FF8C00;
   border-radius: 10px;
   cursor: pointer;
@@ -77,6 +94,12 @@
   color: gray;
   font-weight: bold;
   text-align: center;
+  justify-content: center;
+}
+
+.category-button p {
+  margin: 0;
+  color: gray;
 }
 
 .category-button:hover {
@@ -92,11 +115,25 @@
   color: white;
 }
 
-/* 条件を教えてね のタイトル */
-.search-title {
-  font-size: 20px; /* 文字を調整 */
+.btn-back {
+  margin-top: 2rem;
+  background-color: #FF8C00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 24px;
   font-weight: bold;
-  color:#Ff618B ; /* ピンクでかわいく */
-  text-align: center;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  max-width: 300px;
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-back:hover {
+  background-color: #FFA733;
+  transform: scale(1.05);
 }

@@ -115,9 +115,20 @@ const ShopSignUpPage: React.FC = () => {
             required
           />
         </div>
-        <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+        <div className="d-grid mb-2">
+          <button type="submit" className="btn btn-sign-up">
             登録
+          </button>
+        </div>
+
+        {/* 前に戻るボタン */}
+        <div className="d-grid">
+          <button
+            type="button"
+            className="btn btn-back"
+            onClick={() => navigate(-1)}
+          >
+            前に戻る
           </button>
         </div>
       </form>

@@ -1,7 +1,6 @@
-// src/OwnerDashboard.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./OwnerDashboard.css"
+import "./OwnerDashboard.css";
 
 type Shop = {
   id: number;
@@ -31,12 +30,23 @@ const OwnerDashboard: React.FC = () => {
   return (
     <div className="container dashboard-container">
       <h2 className="text-center mb-4">店舗一覧（店主ID: {owner_id}）</h2>
+
+      {/* 新規店舗を追加ボタン */}
       <button
         className="btn-add-shop"
         onClick={() => navigate(`/owner/${owner_id}/shop_sign_up`)}
       >
         ＋ 新規店舗を追加
       </button>
+
+      {/* 前のページに戻るボタン */}
+      <button
+        className="btn-back"
+        onClick={() => navigate(-1)}  // 前のページに戻る
+      >
+        前のページに戻る
+      </button>
+
       {shops.length === 0 ? (
         <p>まだ店舗が登録されていません。</p>
       ) : (
