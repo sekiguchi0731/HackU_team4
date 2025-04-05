@@ -70,7 +70,7 @@ const SignInPage: React.FC = () => {
               className="btn-secondary"
               onClick={() => navigate("/")}
             >
-              前の画面に戻る
+              ←前の画面に戻る
             </button>
           </div>
         </div>
