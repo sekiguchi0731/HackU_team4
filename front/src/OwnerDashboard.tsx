@@ -13,11 +13,12 @@ const OwnerDashboard: React.FC = () => {
   const { owner_id } = useParams();
   const navigate = useNavigate();
   const [shops, setShops] = useState<Shop[]>([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchShops = async () => {
       const res = await fetch(
-        `http://localhost:5050/shops_by_owner/${owner_id}`
+        `${apiUrl}/shops_by_owner/${owner_id}`
       );
       const data = await res.json();
       if (res.ok && data.shops) {
