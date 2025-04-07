@@ -6,11 +6,12 @@ const SignInPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5050/signed_in", {
+    const res = await fetch(`${apiUrl}/signed_in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

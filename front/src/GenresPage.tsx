@@ -7,11 +7,12 @@ const GenresPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [categories, setCategories] = useState<{ name: string }[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5050/genres")
+    fetch(`${apiUrl}/genres`)
       .then((res) => res.json())
       .then((data: string[]) => {
         const formatted = data.map((name) => ({ name }));
@@ -37,11 +38,12 @@ const GenresPage: React.FC = () => {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const currentTime = `${hours}:${minutes}`;
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     try {
       const encodedAddress = encodeURIComponent(search);
       const response = await fetch(
-        `http://localhost:5050/recommend?user_pos=${encodedAddress}&preferred_category=${categoryName}&current_time=${currentTime}`
+        `${apiUrl}/recommend?user_pos=${encodedAddress}&preferred_category=${categoryName}&current_time=${currentTime}`
       );
 
       console.log("レスポンスステータス:", response.status);

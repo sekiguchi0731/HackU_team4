@@ -11,6 +11,7 @@ const SignUpPage: React.FC = () => {
   });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -21,7 +22,7 @@ const SignUpPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5050/signed_up", {
+    const res = await fetch(`${apiUrl}/signed_up`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

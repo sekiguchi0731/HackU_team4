@@ -17,6 +17,7 @@ const ReservePage: React.FC = () => {
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeatId, setSelectedSeatId] = useState<string>("");
   const [message, setMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // 座席情報取得
   useEffect(() => {
@@ -25,7 +26,7 @@ const ReservePage: React.FC = () => {
 
       try {
         const res = await fetch(
-          `http://localhost:5050/reserve_data?shop_id=${shopId}`
+          `${apiUrl}/reserve_data?shop_id=${shopId}`
         );
         const data = await res.json();
 
@@ -56,7 +57,7 @@ const ReservePage: React.FC = () => {
     formData.append("shop_name", shopName);
 
     try {
-      const res = await fetch("http://localhost:5050/reserve", {
+      const res = await fetch(`${apiUrl}/reserve`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

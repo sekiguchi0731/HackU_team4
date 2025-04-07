@@ -18,6 +18,7 @@ const SeatRegisterPage: React.FC = () => {
   const [seatName, setSeatName] = useState("");
   const [capacity, setCapacity] = useState<string>("1");
   const [message, setMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +36,7 @@ const SeatRegisterPage: React.FC = () => {
       return;
     }
 
-    const res = await fetch("http://localhost:5050/seats_register", {
+    const res = await fetch(`${apiUrl}/seats_register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

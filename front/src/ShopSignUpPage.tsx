@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const ShopSignUpPage: React.FC = () => {
   const { owner_id } = useParams();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +24,7 @@ const ShopSignUpPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5050/shops", {
+    const res = await fetch(`${apiUrl}/shops`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

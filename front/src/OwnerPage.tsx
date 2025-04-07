@@ -4,11 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 const OwnerPage: React.FC = () => {
   const { owner_id } = useParams();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const checkShop = async () => {
       const res = await fetch(
-        `http://localhost:5050/owner/${owner_id}/check_shop`
+        `${apiUrl}/owner/${owner_id}/check_shop`
       );
       const data = await res.json();
 
