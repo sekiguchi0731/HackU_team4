@@ -65,7 +65,7 @@ def recommend():
             "name": rec["name"],
             "address": rec["address"],
             "description": (
-                f"{rec['distance']:.2f}km先,\n"
+                f"{rec['distance']:.2f}m先,\n"
                 f"住所: {rec['address']},\n"
                 f"営業時間: {rec['opening_time']} - {rec['closing_time']},\n"
                 f"空席数: {rec['total_available_capacity']},"
@@ -441,7 +441,7 @@ def reserve_page():
         if seat and seat.is_active:
             seat.is_active = False
             #testのためいちいちfalseにするとめんどくさいのでのちにコメントアウト#
-            # seat.is_active = True
+            seat.is_active = True
 
             db.session.commit()
             return render_template("reserve_success.html", shop_name=shop_name, seat=seat)
