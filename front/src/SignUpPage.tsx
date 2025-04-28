@@ -113,7 +113,7 @@ const SignUpPage: React.FC = () => {
           className="btn-back"
           onClick={() => navigate(-1)}
         >
-          前に戻る
+          ←前の画面に戻る
         </button>
       </div>
     </div>
